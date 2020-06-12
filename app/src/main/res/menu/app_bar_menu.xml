@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuDashboard"
+        android:icon="@drawable/ic_dashboard"
+        android:title="@string/dashboard"
+        app:showAsAction="always"
+        android:titleCondensed="@string/dashboard"
+
+        />
+    <item
+        android:id="@+id/menuTasks"
+        android:icon="@drawable/ic_event_note"
+        android:title="@string/single_task"
+        app:showAsAction="always"
+       />
+    <item
+        android:id="@+id/menuSettings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom"
+        />
+</menu>
