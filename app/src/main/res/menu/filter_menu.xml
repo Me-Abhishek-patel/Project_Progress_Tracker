@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/filter_item1"
+        android:title="@string/all_projects"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_filter_all_projects"
+        />
+    <item
+        android:id="@+id/filter_item2"
+        android:title="@string/completed"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_filter_completed"
+        />
+    <item
+        android:id="@+id/filter_item3"
+        android:title="@string/pending"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_filter_pending"
+        />
+
+
+
+
+</menu>

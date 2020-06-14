@@ -19,6 +19,11 @@
         android:id="@+id/menuSettings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
+    <item
+        android:id="@+id/iteme4"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_blank"
+        android:title="  "/>
 </menu>

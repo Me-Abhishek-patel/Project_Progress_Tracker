@@ -21,4 +21,8 @@
         <item name="android:fontFamily">@font/poppins_medium</item>
     </style>
 
+    <style name="sequenceText" >
+        <item name="textSize">@dimen/plain_text</item>
+    </style>
+
 </resources>

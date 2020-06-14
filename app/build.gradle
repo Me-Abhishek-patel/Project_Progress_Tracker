@@ -31,5 +31,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.material:material:1.0.0-alpha1'
     implementation "com.github.skydoves:progressview:1.0.8"
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.6'
+    implementation 'com.github.vipulasri:timelineview:1.1.5'
 
 }
