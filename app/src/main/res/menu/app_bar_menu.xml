@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menuDashboard"
-        android:icon="@drawable/ic_dashboard"
+        android:icon="@drawable/ic_dashboard_selected"
         android:title="@string/dashboard"
         app:showAsAction="always"
         android:titleCondensed="@string/dashboard"
@@ -19,11 +19,7 @@
         android:id="@+id/menuSettings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
-    <item
-        android:id="@+id/iteme4"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_blank"
-        android:title="  "/>
+
 </menu>

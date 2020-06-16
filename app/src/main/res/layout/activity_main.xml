@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
     tools:context=".MainActivity">
+
+
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+
         android:orientation="vertical">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,967 +22,99 @@
             android:background="@drawable/top_background"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="16dp"
+            android:paddingRight="16dp"
             android:paddingBottom="8dp"
 
-            
+
             >
 
 
-            <RelativeLayout
+            <com.skydoves.expandablelayout.ExpandableLayout
+                android:id="@+id/expandable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="@string/dashboard"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/h2" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-
-                    android:src="@drawable/ic_sort_"
-
-                    />
-            </RelativeLayout>
-
-            <GridLayout
-
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:columnCount="3"
-                android:orientation="horizontal"
-                android:rowCount="1">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:orientation="horizontal">
-
-                    <!-- Column 1 -->
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/container_bg"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="17"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/h1" />
-
-                        <com.skydoves.progressview.ProgressView
-                            android:id="@+id/progressView1"
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            app:progressView_autoAnimate="true"
-                            app:progressView_colorBackground="@color/colorPrimary"
-                            app:progressView_colorProgress="@color/colorGreen"
-                            app:progressView_max="100"
-                            app:progressView_min="0"
-                            app:progressView_progress="50" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-
-                            android:text="@string/projects"
-                            android:textAlignment="viewStart"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-
-                    </LinearLayout>
-                    <!-- Column 2 -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right"
-                        android:layout_weight="1"
-                        android:background="@drawable/container_bg"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="19"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/h1" />
-
-                        <com.skydoves.progressview.ProgressView
-                            android:id="@+id/progressView2"
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            app:progressView_autoAnimate="true"
-                            app:progressView_colorBackground="@color/colorPrimary"
-                            app:progressView_colorProgress="@color/colorSkyBlue"
-                            app:progressView_max="100"
-                            app:progressView_min="0"
-                            app:progressView_progress="60" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-
-                            android:text="@string/done"
-                            android:textAlignment="viewStart"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-
-                    </LinearLayout>
-                    <!-- Column 3 -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/container_bg"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="21"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/h1" />
-
-                        <com.skydoves.progressview.ProgressView
-                            android:id="@+id/progressView3"
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            app:progressView_autoAnimate="true"
-                            app:progressView_colorBackground="@color/colorPrimary"
-                            app:progressView_colorProgress="@color/colorSecondary"
-                            app:progressView_max="100"
-                            app:progressView_min="0"
-                            app:progressView_progress="70" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-
-                            android:text="@string/pending"
-                            android:textAlignment="viewStart"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-            </GridLayout>
+                app:expandable_duration="300"
+                app:expandable_isExpanded="true"
+                app:expandable_parentLayout="@layout/layout_parent"
+                app:expandable_secondLayout="@layout/layout_second"
+                app:expandable_showSpinner="false" />
 
 
         </LinearLayout>
+
+
         <me.ibrahimsn.lib.SmoothBottomBar
             android:id="@+id/filterAppbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
-            android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
-            app:itemFontFamily="@font/poppins_medium"
+            android:layout_marginRight="16dp"
             android:backgroundTint="@color/colorWhite"
+            android:elevation="16dp"
             app:backgroundColor="@color/colorWhite"
+            app:cornerRadius="25dp"
             app:fabAlignmentMode="end"
             app:fabCradleRoundedCornerRadius="20dp"
-            app:cornerRadius="25dp"
-            android:elevation="16dp"
-            app:indicatorColor="@color/colorSecondary"
             app:hideOnScroll="true"
-            app:menu="@menu/filter_menu"
-            app:textColor="@color/colorWhite"
             app:iconTint="@color/colorAccent"
             app:iconTintActive="@color/colorWhite"
+            app:indicatorColor="@color/colorSecondary"
+            app:itemFontFamily="@font/poppins_medium"
+            app:menu="@menu/filter_menu"
+            app:textColor="@color/colorWhite"
+
             />
 
 
-        <androidx.core.widget.NestedScrollView
+        <!--                <androidx.core.widget.NestedScrollView-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:fillViewport="true">-->
+
+
+        <ListView
+            android:id="@+id/project_listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
+        <!--        </androidx.core.widget.NestedScrollView>-->
 
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorGreen"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorSecondary"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorSkyBlue"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorGreen"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorGreen"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_secondary"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/circle_skyblue"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorAccent" />
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/circle_green"
-                            android:gravity="center"
-                            android:text="12"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/plain_text" />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="16dp"
-
-                        app:cardCornerRadius="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Project 1"
-                                    android:drawableLeft="@drawable/ic_folder"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/h3"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <com.skydoves.progressview.ProgressView
-
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_height="8dp"
-                                    app:progressView_autoAnimate="true"
-                                    app:progressView_colorBackground="@color/colorAccent"
-                                    app:progressView_colorProgress="@color/colorSecondary"
-                                    app:progressView_max="100"
-                                    app:progressView_min="0"
-                                    app:progressView_progress="50" />
-                                <TextView
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="@dimen/plain_text"
-                                    android:text="60%"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days Left: 7"
-                                android:textSize="@dimen/plain_text"
-                                android:textColor="@color/colorSecondary"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-</LinearLayout>
-
-
-
-        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-    
-    
-    
+
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        app:itemIconTint="@color/colorWhite"
-        app:fabAlignmentMode="end"
         android:foregroundTint="@color/colorWhite"
-
+        app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="20dp"
-        app:hideOnScroll="true"
+
+
+        app:itemIconTint="@color/colorWhite"
         app:menu="@menu/app_bar_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorSecondary"
-       app:layout_anchorGravity="right"
         android:layout_marginRight="16dp"
-        android:elevation="4dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:elevation="100dp"
         android:src="@drawable/ic_new_folder"
         app:borderWidth="0dp"
-
-        app:layout_anchor="@id/bottomAppbar"
         app:iconTintActive="@color/colorWhite"
-        app:maxImageSize="35dp"
-        app:indicatorColor="@color/colorSecondary"/>
 
-
-
+        app:indicatorColor="@color/colorSecondary"
+        app:layout_anchor="@id/bottomAppbar"
+        app:layout_anchorGravity="right"
+        app:maxImageSize="35dp" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

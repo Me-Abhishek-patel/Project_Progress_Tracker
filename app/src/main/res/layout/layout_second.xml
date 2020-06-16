@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <GridLayout
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:rowCount="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <!-- Column 1 -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/container_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="17"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/h1" />
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/progressView1"
+                    app:progressView_highlighting="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    app:progressView_autoAnimate="true"
+                    app:progressView_colorBackground="@color/colorPrimary"
+                    app:progressView_colorProgress="@color/colorGreen"
+                    app:progressView_max="100"
+                    app:progressView_min="0"
+                    app:progressView_progress="50" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:text="@string/projects"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/plain_text" />
+
+
+            </LinearLayout>
+            <!-- Column 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:background="@drawable/container_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="19"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/h1" />
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/progressView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    app:progressView_autoAnimate="true"
+                    app:progressView_colorBackground="@color/colorPrimary"
+                    app:progressView_colorProgress="@color/colorSkyBlue"
+                    app:progressView_max="100"
+                    app:progressView_min="0"
+                    app:progressView_progress="60" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:text="@string/done"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/plain_text" />
+
+
+            </LinearLayout>
+            <!-- Column 3 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/container_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="21"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/h1" />
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/progressView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    app:progressView_autoAnimate="true"
+                    app:progressView_colorBackground="@color/colorPrimary"
+                    app:progressView_colorProgress="@color/colorSecondary"
+                    app:progressView_max="100"
+                    app:progressView_min="0"
+                    app:progressView_progress="70" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:text="@string/pending"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/plain_text" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </GridLayout>
+</GridLayout>
