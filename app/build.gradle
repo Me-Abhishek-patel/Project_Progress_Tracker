@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.projectprogresstracker"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -34,5 +34,7 @@ dependencies {
     implementation "com.github.skydoves:progressview:1.0.8"
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.6'
     implementation 'com.github.vipulasri:timelineview:1.1.5'
+    implementation 'com.github.mejdi14:Flat-Dialog-Android:1.0.5'
+
 
 }

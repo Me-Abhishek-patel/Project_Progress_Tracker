@@ -67,6 +67,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:elevation="16dp"
 
             app:cardCornerRadius="20dp">
@@ -77,10 +78,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+
 
                     <TextView
                         android:id="@+id/tv_project_name"
@@ -88,9 +86,9 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_folder"
                         android:text="Project 1"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/h3" />
-                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -123,7 +121,7 @@
 
                 <TextView
                     android:id="@+id/tv_days_left"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Days Left: 7"
                     android:textColor="@color/colorSecondary"

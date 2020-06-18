@@ -2,9 +2,9 @@
 <resources>
     <dimen name="action_button_padding">24dp</dimen>
 
-    <dimen name="h1">36sp</dimen>
-    <dimen name="h2">24sp</dimen>
-    <dimen name="h3">18sp</dimen>
+    <dimen name="h1">32sp</dimen>
+    <dimen name="h2">20sp</dimen>
+    <dimen name="h3">16sp</dimen>
     <dimen name="plain_text">12sp</dimen>
 
 </resources>

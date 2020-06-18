@@ -1,6 +1,8 @@
 package com.example.projectprogresstracker;
 
 import android.content.Context;
+import android.text.Layout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,25 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
 
         ProjectModel currentProjectModel = mProjectList.get(position);
 
+
+        /**
+         * days left textview
+         */
+        TextView daysLeft = (TextView) listItem.findViewById(R.id.tv_days_left);
+        if(currentProjectModel.getmProjectProgress()==100)
+        {
+            daysLeft.setText(getContext().getText(R.string.completed));
+            daysLeft.setGravity(Gravity.END);
+
+            daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorGreen));
+        }
+        else {
+            daysLeft.setText("Days left: ");
+            daysLeft.setGravity(Gravity.START);
+
+            daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorSecondary));
+        }
+
         /**
          * project name text view
          */
@@ -73,10 +94,6 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         TextView endDate = (TextView) listItem.findViewById(R.id.tv_project_end_date);
         TextView todaysDate = (TextView) listItem.findViewById(R.id.tv_todays_date);
 
-        /**
-         * days left textview
-         */
-        TextView daysLeft = (TextView) listItem.findViewById(R.id.tv_days_left);
 
 
 

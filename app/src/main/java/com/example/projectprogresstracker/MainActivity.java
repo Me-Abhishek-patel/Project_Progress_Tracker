@@ -6,23 +6,37 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
+
+//import com.example.flatdialoglibrary.dialog.FlatDialog;
+
+import com.example.flatdialoglibrary.dialog.FlatDialog;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import com.skydoves.expandablelayout.ExpandableLayout;
 import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -59,23 +73,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        ArrayList<ProjectModel> projectArrayList = new ArrayList<>();
-
-        projectArrayList.add(new ProjectModel("my Project 1", "20/01/2020", "28/01/2020", 55));
-        projectArrayList.add(new ProjectModel("my Project 2", "20/01/2020", "28/01/2020", 25));
-        projectArrayList.add(new ProjectModel("my Project 3 is very good you know", "20/01/2020", "28/01/2020", 75));
-        projectArrayList.add(new ProjectModel("my Project 4", "20/01/2020", "28/01/2020", 45));
-        projectArrayList.add(new ProjectModel("my Project 5", "20/01/2020", "28/01/2020", 100));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 45));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 55));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 49));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 89));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 45));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 92));
-        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 65));
+        final ArrayList<ProjectModel> projectArrayList = new ArrayList<>();
+//
+//        projectArrayList.add(new ProjectModel("my Project 1", "20/01/2020", "28/01/2020", 55));
+//        projectArrayList.add(new ProjectModel("my Project 2", "20/01/2020", "28/01/2020", 25));
+//        projectArrayList.add(new ProjectModel("my Project 3 is very good you know", "20/01/2020", "28/01/2020", 75));
+//        projectArrayList.add(new ProjectModel("my Project 4", "20/01/2020", "28/01/2020", 45));
+//        projectArrayList.add(new ProjectModel("my Project 5", "20/01/2020", "28/01/2020", 100));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 45));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 55));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 49));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 89));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 45));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 92));
+//        projectArrayList.add(new ProjectModel("my Project 6", "20/01/2020", "28/01/2020", 65));
 
         mProjectAdapter = new ProjectAdapter(this, projectArrayList);
         projectListView.setAdapter(mProjectAdapter);
+
 
 
 
@@ -91,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (i) {
                     case 0:
                         Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
+
                         return true;
                     case 1:
                         Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
@@ -136,12 +152,51 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "fab clicked", Toast.LENGTH_SHORT).show();
+
+                final FlatDialog flatDialog = new FlatDialog(MainActivity.this);
+                flatDialog.setTitle("Add New Project")
+                        .setFirstTextFieldHint("project name")
+                        .setFirstButtonText("CREATE")
+//                        .setSecondButtonText("CANCEL")
+                        .isCancelable(true)
+
+                        .setFirstButtonColor(ContextCompat.getColor(getApplicationContext(),R.color.colorSecondary))
+//                        .setSecondButtonColor(ContextCompat.getColor(getApplicationContext(),R.color.colorSecondary))
+//                        .setFirstTextFieldBorderColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent))
+                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary))
+//                        .setFirstTextFieldHintColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent))
+//                        .setTitleColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent))
+//                        .setSubtitleColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent))
+
+
+                        .withFirstButtonListner(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(MainActivity.this, flatDialog.getFirstTextField()+"added", Toast.LENGTH_SHORT).show();
+                                projectArrayList.add(new ProjectModel(flatDialog.getFirstTextField(), "00/00/0000", "00/00/00020", 0));
+                                mProjectAdapter.notifyDataSetChanged();
+                                flatDialog.dismiss();
+                            }
+                        })
+//                        .withSecondButtonListner(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                flatDialog.dismiss();
+//                            }
+//                        })
+                        .show();
+
+
+
             }
         });
 
 
+
+
+
     }
+
 
 
     /**
