@@ -5,12 +5,22 @@ public class ProjectModel {
     private String mProjectStartDate;
     private String mProjectEndDate;
     private int mProjectProgress;
+    int mId;
 
-    public ProjectModel(String mProjectName, String mProjectStartDate, String mProjectEndDate, int mProjectProgress) {
+    public ProjectModel(int id,String mProjectName, String mProjectStartDate, String mProjectEndDate, int mProjectProgress) {
         this.mProjectName = mProjectName;
         this.mProjectStartDate = mProjectStartDate;
         this.mProjectEndDate = mProjectEndDate;
         this.mProjectProgress = mProjectProgress;
+        this.mId = id;
+    }
+
+    public int getmId() {
+        return mId;
+    }
+
+    public void setmId(int mId) {
+        this.mId = mId;
     }
 
     public String getmProjectName() {

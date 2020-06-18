@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.skydoves.progressview.HighlightView;
@@ -31,6 +33,12 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         mProjectList = objects;
     }
 
+    @Override
+    public ProjectModel getItem(int position) {
+        return mProjectList.get(position);
+    }
+
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -38,7 +46,11 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.project_item,parent,false);
 
+
+
         ProjectModel currentProjectModel = mProjectList.get(position);
+
+
 
 
         /**
