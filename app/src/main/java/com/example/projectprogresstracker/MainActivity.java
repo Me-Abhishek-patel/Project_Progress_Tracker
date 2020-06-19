@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -197,6 +198,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+
+    /**
+     * Query all project
+     */
     public void queryProject(){
         String[] projection = {
                 COLUMN_PROJECT_NAME, _ID
@@ -222,9 +227,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
+    /**
+     * on item click
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int mId = projectArrayList.get(position).getmId();
         Toast.makeText(getApplicationContext(), "" + mId , Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
+        myIntent.putExtra("id", mId); //Optional parameters
+        MainActivity.this.startActivity(myIntent);
     }
 }

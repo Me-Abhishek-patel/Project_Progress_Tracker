@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="35%"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/completed"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h3" />
+    </LinearLayout>
+
+    <com.skydoves.progressview.ProgressView
+        android:id="@+id/pv_project_detail"
+        app:progressView_highlighting="true"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_height="10dp"
+        app:progressView_autoAnimate="true"
+        app:progressView_colorBackground="@color/colorAccent"
+        app:progressView_colorProgress="@color/colorSecondary"
+        app:progressView_max="100"
+        app:progressView_min="0"
+        app:progressView_progress="35" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAlignBottom="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_date_range"
+
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Jun 10, 2020"
+            android:textSize="@dimen/h4"
+            android:background="@drawable/bg_date_picker"
+            android:padding="6dp"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/poppins_medium"
+
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAlignBottom="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_double_arrow"
+
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Jun 10, 2020"
+            android:background="@drawable/bg_date_picker"
+            android:padding="6dp"
+            android:textColor="@color/colorWhite"
+
+            android:textSize="@dimen/h4"
+            android:fontFamily="@font/poppins_medium"
+
+
+            />
+
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:text="Days Left : 31"
+        android:drawablePadding="8dp"
+        android:textColor="@color/colorWhite"
+        android:drawableLeft="@drawable/ic_baseline_av_timer_24"
+        android:textSize="@dimen/h4"
+        android:layout_marginBottom="2dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:text="Target 3.22% /day"
+        android:drawablePadding="8dp"
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/colorWhite"
+        android:drawableLeft="@drawable/ic_baseline_check_circle_24"
+        android:textSize="@dimen/h4"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+
+            android:src="@drawable/ic_notes"
+
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description / Notes...\n"
+            android:textSize="@dimen/h4"
+            android:background="@drawable/bg_date_picker"
+            android:padding="6dp"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/poppins_medium"
+
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

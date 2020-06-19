@@ -23,6 +23,7 @@ android:layout_height="wrap_content">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
         android:onClick="expand_collapse"
         android:src="@drawable/ic_arrow_up_24"/>
     </LinearLayout>
@@ -30,6 +31,7 @@ android:layout_height="wrap_content">
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+
     android:layout_alignParentRight="true"
     android:src="@drawable/ic_sort_"
 
