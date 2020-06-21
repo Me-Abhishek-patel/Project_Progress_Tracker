@@ -8,13 +8,19 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 //import com.example.flatdialoglibrary.dialog.FlatDialog;
@@ -23,17 +29,24 @@ import com.example.flatdialoglibrary.dialog.FlatDialog;
 
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.gohn.nativedialog.ButtonClickListener;
+import com.gohn.nativedialog.ButtonType;
+import com.gohn.nativedialog.NDialog;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
 
@@ -51,10 +64,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     FloatingActionButton fab;
     SmoothBottomBar filterSmoothBottomBar;
     ArrayList<ProjectModel> projectArrayList;
-    SQLiteDatabase writableProjectDb,readableProjectDb;
+    SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
+    NDialog nDialog;
+    EditText edtddProject;
+    Calendar calender;
 
-
+    @Override
+    protected void onPostResume() {
+        queryProject();
+        super.onPostResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +96,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         projectListView.setOnItemClickListener(this);
         projectArrayList = new ArrayList<>();
         mProjectAdapter = new ProjectAdapter(this, projectArrayList);
+        calender = Calendar.getInstance();
+        nDialog = new NDialog(MainActivity.this, ButtonType.ONE_BUTTON);
+
+
         projectListView.setAdapter(mProjectAdapter);
+        projectListView.setEmptyView(findViewById(R.id.emptyListView));
 
 
-        filterSmoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener(){
+        filterSmoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public boolean onItemSelect(int i) {
@@ -98,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         return false;
                 }
             }
-
 
 
         });
@@ -126,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         queryProject();
+
+
         /**
          * fab onClick method
          */
@@ -150,6 +176,47 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 }
                             })
                             .show();
+//                    nDialog.setTitle("Add New Project");
+//                    nDialog.setMessage(R.string.dialog_message);
+//                    final List<View> childViews = nDialog.getCustomViewChildren();
+//                    // Bottom Button OnClick Event Handler
+//
+//                    ButtonClickListener buttonClickListener = new ButtonClickListener() {
+//                        @Override
+//                        public void onClick(int button) {
+//                            switch (button) {
+//                                case NDialog.BUTTON_POSITIVE:
+//                                    for (View childView : childViews) {
+//                                        switch (childView.getId()) {
+//                                            case R.id.edt_add_project:
+//                                                String mproName;
+//                                                mproName = ((Switch) childView).getText().toString();
+//                                                addProject(edtddProject.getText().toString());
+//                                                break;
+//
+//                                        }
+//                                    }
+//
+//
+//
+//
+//                                    Toast.makeText(getApplicationContext(),"Added", Toast.LENGTH_SHORT).show();
+//                                    break;
+//
+//                            }
+//                        }
+//                    };
+//
+//                    nDialog.setPositiveButtonText("Add Project");
+//                    nDialog.setPositiveButtonTextColor(ContextCompat.getColor(getApplicationContext(),R.color.colorWhite));
+//                    nDialog.setPositiveButtonOnClickDismiss(false); // default : true
+//                    nDialog.setPositiveButtonClickListener(buttonClickListener);
+//
+//
+//// Custom View Setup (View or resourceId)
+//                    nDialog.setCustomView(R.layout.edit_text);
+//
+//                    nDialog.show();
 
 
                 }
@@ -157,10 +224,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
 
+        /**
+         * on item long press
+         */
+        projectListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
+
+                int mId = projectArrayList.get(position).getmId();
+                deleteProject(mId);
+                Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
 
 
     }
-
 
 
     /**
@@ -184,15 +264,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * add new project
      */
     public void addProject(String projectName) {
+        int mStartYear = calender.get(Calendar.YEAR);
+        int mStartMonth = calender.get(Calendar.MONTH) + 1;
+        int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
+
+        String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_PROJECT_NAME,projectName);
-        if(writableProjectDb.insert(TABLE_NAME, null, cv)==-1)
-        {
-            Toast.makeText(getApplicationContext(),"Project can not be added",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(),projectName + " Added",Toast.LENGTH_SHORT).show();
+        cv.put(COLUMN_PROJECT_NAME, projectName);
+        cv.put(COLUMN_START_DATE, mStartDate);
+        cv.put(COLUMN_END_DATE, mStartDate);
+        Log.i("mStartDate: ", mStartDate);
+        if (writableProjectDb.insert(TABLE_NAME, null, cv) == -1) {
+            Toast.makeText(getApplicationContext(), "Project can not be added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }
         queryProject();
 
@@ -202,9 +287,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     /**
      * Query all project
      */
-    public void queryProject(){
+    public void queryProject() {
         String[] projection = {
-                COLUMN_PROJECT_NAME, _ID
+                COLUMN_PROJECT_NAME, _ID, COLUMN_START_DATE, COLUMN_END_DATE
         };
 
         Cursor cursor = readableProjectDb.query(
@@ -217,13 +302,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 null               // The sort order
         );
         projectArrayList.clear();
-        while(cursor.moveToNext()) {
-            String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
+        while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
-            projectArrayList.add(new ProjectModel( id,projectName, "20/01/2020", "28/01/2020", 55));
+            String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
+            String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
+            String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
+
+            projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, 98));
             mProjectAdapter.notifyDataSetChanged();
         }
         cursor.close();
+    }
+
+    public void deleteProject(int id) {
+        // Define 'where' part of query.
+        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+// Specify arguments in placeholder order.
+        String[] selectionArgs = {String.valueOf(id)};
+// Issue SQL statement.
+        queryProject();
+
+        int deletedRows = writableProjectDb.delete(TABLE_NAME, selection, selectionArgs);
+
+        queryProject();
     }
 
 
@@ -233,9 +334,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int mId = projectArrayList.get(position).getmId();
-        Toast.makeText(getApplicationContext(), "" + mId , Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
-        myIntent.putExtra("id", mId); //Optional parameters
+        myIntent.putExtra("mId", mId); //Optional parameters
         MainActivity.this.startActivity(myIntent);
     }
+
+
 }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
+    xmlns:rdv="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
 
@@ -79,9 +80,20 @@
         <ListView
             android:id="@+id/project_listView"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:paddingBottom="56dp"
             android:nestedScrollingEnabled="true" />
+
+        <ImageView
+            android:id="@+id/emptyListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:paddingBottom="84dp"
+            android:src="@drawable/emptystate"
+            android:visibility="gone" />
 
 
         <!--        </androidx.core.widget.NestedScrollView>-->

@@ -11,13 +11,13 @@
         android:id="@+id/filter_item2"
         android:title="@string/completed"
         app:showAsAction="always"
-        android:icon="@drawable/ic_filter_completed"
+        android:icon="@drawable/ic_check"
         />
     <item
         android:id="@+id/filter_item3"
         android:title="@string/pending"
         app:showAsAction="always"
-        android:icon="@drawable/ic_filter_pending"
+        android:icon="@drawable/ic_pending"
         />
 
 

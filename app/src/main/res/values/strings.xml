@@ -10,4 +10,5 @@
     <string name="all_projects">All Projects</string>
     <string name="completed">Completed</string>
     <string name="all">All</string>
+    <string name="dialog_message">Enter Project Name Here</string>
 </resources>

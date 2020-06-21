@@ -18,13 +18,19 @@ import androidx.core.content.ContextCompat;
 import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
 
     Context mContext;
     private List<ProjectModel> mProjectList = new ArrayList<>();
+    SimpleDateFormat sdf, inputFormat;
+    Calendar c;
 
 
     public ProjectAdapter(@NonNull Context context, @NonNull List<ProjectModel> objects) {
@@ -43,29 +49,41 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
-        if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.project_item,parent,false);
-
+        if (listItem == null)
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.project_item, parent, false);
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
         ProjectModel currentProjectModel = mProjectList.get(position);
 
+        /**
+         * project Start Date, end date & today's date text views
+         */
+        TextView startDate = (TextView) listItem.findViewById(R.id.tv_project_star_date);
+        startDate.setText(getDay(currentProjectModel.getmProjectStartDate()));
 
+        TextView endDate = (TextView) listItem.findViewById(R.id.tv_project_end_date);
+        endDate.setText(getDay(currentProjectModel.getmProjectEndDate()));
 
+        TextView todaysDate = (TextView) listItem.findViewById(R.id.tv_todays_date);
+        final Calendar c = Calendar.getInstance();
+        todaysDate.setText(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
 
         /**
          * days left textview
          */
+
+
         TextView daysLeft = (TextView) listItem.findViewById(R.id.tv_days_left);
-        if(currentProjectModel.getmProjectProgress()==100)
-        {
+        if (currentProjectModel.getmProjectProgress() == 100) {
             daysLeft.setText(getContext().getText(R.string.completed));
             daysLeft.setGravity(Gravity.END);
 
             daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorGreen));
         }
         else {
-            daysLeft.setText("Days left: ");
+            daysLeft.setText("Days left: " + getDaysLeft(currentProjectModel.getmProjectEndDate()));
             daysLeft.setGravity(Gravity.START);
 
             daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorSecondary));
@@ -99,22 +117,75 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         progress.setText(currentProjectModel.getmProjectProgress() + "%");
 
 
-        /**
-         * project Start Date, end date & today's date text views
-         */
-        TextView startDate = (TextView) listItem.findViewById(R.id.tv_project_star_date);
-        TextView endDate = (TextView) listItem.findViewById(R.id.tv_project_end_date);
-        TextView todaysDate = (TextView) listItem.findViewById(R.id.tv_todays_date);
+        View lineToday = listItem.findViewById(R.id.line_today);
+        View lineEnd = listItem.findViewById(R.id.line_end_date);
 
 
-
-
-
-
-
-
+        if (currentProjectModel.getmProjectProgress() == 100) {
+            lineToday.getBackground().setAlpha(255);
+            todaysDate.getBackground().setAlpha(255);
+            lineEnd.getBackground().setAlpha(255);
+            endDate.getBackground().setAlpha(255);
+            todaysDate.setBackgroundResource(R.drawable.circle_skyblue);
+            endDate.setBackgroundResource(R.drawable.circle_green);
+        } else if (currentProjectModel.getmProjectProgress() > 50) {
+            lineToday.getBackground().setAlpha(128);
+            todaysDate.getBackground().setAlpha(128);
+            lineEnd.getBackground().setAlpha(64);
+            endDate.getBackground().setAlpha(64);
+            todaysDate.setBackgroundResource(R.drawable.circle_skyblue);
+            endDate.setBackgroundResource(R.drawable.circle_accent);
+        } else {
+            lineToday.getBackground().setAlpha(64);
+            todaysDate.getBackground().setAlpha(64);
+            lineEnd.getBackground().setAlpha(64);
+            endDate.getBackground().setAlpha(64);
+            todaysDate.setBackgroundResource(R.drawable.circle_accent);
+            endDate.setBackgroundResource(R.drawable.circle_accent);
+        }
 
 
         return listItem;
     }
+
+    public String getDay(String inputText) {
+
+
+        Date date = null;
+        try {
+            date = inputFormat.parse(inputText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String day = String.valueOf(date.getDate());
+        return day;
+
+    }
+
+    public String getDaysLeft(String dateTill) {
+        final Calendar c = Calendar.getInstance();
+        int mStartYear = c.get(Calendar.YEAR);
+        int mStartMonth = c.get(Calendar.MONTH) + 1;
+        int mStartDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        String mDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
+        Date mdate = null;
+        try {
+            mdate = inputFormat.parse(mDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date = null;
+        try {
+            date = inputFormat.parse(dateTill);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int diffInDays = (int) ((date.getTime() - mdate.getTime()) / (1000 * 60 * 60 * 24));
+
+        return String.valueOf(diffInDays);
+    }
+
 }

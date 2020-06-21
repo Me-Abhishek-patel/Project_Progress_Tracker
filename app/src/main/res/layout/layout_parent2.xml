@@ -15,24 +15,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="back"
 
 
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back" />
 
         <TextView
+            android:id="@+id/tv_project_name_detail"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="Project Name"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/h2"
-            android:onClick="expand_collapse"/>
+            android:onClick="expand_collapse" />
         <ImageView
             android:id="@+id/expand_collapse_arrow2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_marginLeft="8dp"
             android:onClick="expand_collapse"
             android:src="@drawable/ic_arrow_up_24"/>
@@ -62,16 +67,19 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginRight="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_bar_chart"
 
                 />
             <ImageView
                 android:layout_width="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-
+                android:clickable="true"
                 android:src="@drawable/ic_more"
 
                 />

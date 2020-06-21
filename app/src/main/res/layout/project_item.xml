@@ -30,6 +30,7 @@
                 android:textSize="@dimen/plain_text" />
 
             <View
+                android:id="@+id/line_today"
                 android:layout_width="2dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"
@@ -47,6 +48,7 @@
                 android:textSize="@dimen/plain_text" />
 
             <View
+                android:id="@+id/line_end_date"
                 android:layout_width="2dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"

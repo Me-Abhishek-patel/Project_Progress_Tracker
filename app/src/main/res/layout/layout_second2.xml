@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:orientation="horizontal">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,17 +53,21 @@
             android:src="@drawable/ic_date_range"
 
             />
-        <EditText
+
+        <TextView
+            android:id="@+id/edt_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Jun 10, 2020"
             android:textSize="@dimen/h4"
+
             android:background="@drawable/bg_date_picker"
             android:padding="6dp"
             android:textColor="@color/colorWhite"
             android:fontFamily="@font/poppins_medium"
 
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,14 +76,15 @@
             android:src="@drawable/ic_double_arrow"
 
             />
-        <EditText
+
+        <TextView
+            android:id="@+id/edt_end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Jun 10, 2020"
             android:background="@drawable/bg_date_picker"
             android:padding="6dp"
             android:textColor="@color/colorWhite"
-
             android:textSize="@dimen/h4"
             android:fontFamily="@font/poppins_medium"
 
@@ -91,6 +97,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_project_days_left_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -103,6 +110,7 @@
         android:layout_marginBottom="2dp"
         />
     <TextView
+        android:id="@+id/tv_project_target_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -111,7 +119,7 @@
         android:drawablePadding="8dp"
         android:layout_marginBottom="2dp"
         android:textColor="@color/colorWhite"
-        android:drawableLeft="@drawable/ic_baseline_check_circle_24"
+        android:drawableLeft="@drawable/ic_baseline_check_circle_outline_24"
         android:textSize="@dimen/h4"
         />
     <LinearLayout
@@ -128,6 +136,7 @@
 
             />
         <EditText
+            android:id="@+id/edt_project_description_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description / Notes...\n"
