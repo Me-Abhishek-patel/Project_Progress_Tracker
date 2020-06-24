@@ -1,45 +1,37 @@
 package com.example.projectprogresstracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
 
-//import com.example.flatdialoglibrary.dialog.FlatDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import com.example.flatdialoglibrary.dialog.FlatDialog;
-
-import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
-import com.gohn.nativedialog.ButtonClickListener;
 import com.gohn.nativedialog.ButtonType;
 import com.gohn.nativedialog.NDialog;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -49,7 +41,6 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
-
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -67,12 +58,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
     NDialog nDialog;
-    EditText edtddProject;
+    EditText edtddProject, edtAddProjectName;
+    Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
+
     Calendar calender;
 
     @Override
     protected void onPostResume() {
-        queryProject();
+        queryAllProject();
         super.onPostResume();
     }
 
@@ -84,12 +77,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         /**
          * initialisation of variables
          */
-        expandablelayout = (ExpandableLayout) findViewById(R.id.expandable);
-        expandCollapseArrow = (ImageView) findViewById(R.id.expand_collapse_arrow);
-        bottomAppBar = (BottomAppBar) findViewById(R.id.bottomAppbar);
-        projectListView = (ListView) findViewById(R.id.project_listView);
-        fab = (FloatingActionButton) findViewById(R.id.fab_add_project);
-        filterSmoothBottomBar = (SmoothBottomBar) findViewById(R.id.filterAppbar);
+        expandablelayout = findViewById(R.id.expandable);
+        expandCollapseArrow = findViewById(R.id.expand_collapse_arrow);
+        bottomAppBar = findViewById(R.id.bottomAppbar);
+        projectListView = findViewById(R.id.project_listView);
+        fab = findViewById(R.id.fab_add_project);
+        filterSmoothBottomBar = findViewById(R.id.filterAppbar);
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
@@ -149,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
-        queryProject();
+        queryAllProject();
 
 
         /**
@@ -160,66 +153,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @Override
                 public void onClick(View v) {
 
-                    final FlatDialog flatDialog = new FlatDialog(MainActivity.this);
-                    flatDialog.setTitle("Add New Project")
-                            .setFirstTextFieldHint("project name")
-                            .setFirstButtonText("ADD PROJECT")
-                            .isCancelable(true)
-                            .setFirstButtonColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary))
-                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
-                            .withFirstButtonListner(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    addProject(flatDialog.getFirstTextField());
+                    // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View view = inflater.inflate(R.layout.add_project_dialog, null);
+                    builder.setView(view);
 
-                                    flatDialog.dismiss();
-                                }
-                            })
-                            .show();
-//                    nDialog.setTitle("Add New Project");
-//                    nDialog.setMessage(R.string.dialog_message);
-//                    final List<View> childViews = nDialog.getCustomViewChildren();
-//                    // Bottom Button OnClick Event Handler
-//
-//                    ButtonClickListener buttonClickListener = new ButtonClickListener() {
-//                        @Override
-//                        public void onClick(int button) {
-//                            switch (button) {
-//                                case NDialog.BUTTON_POSITIVE:
-//                                    for (View childView : childViews) {
-//                                        switch (childView.getId()) {
-//                                            case R.id.edt_add_project:
-//                                                String mproName;
-//                                                mproName = ((Switch) childView).getText().toString();
-//                                                addProject(edtddProject.getText().toString());
-//                                                break;
-//
-//                                        }
-//                                    }
-//
-//
-//
-//
-//                                    Toast.makeText(getApplicationContext(),"Added", Toast.LENGTH_SHORT).show();
-//                                    break;
-//
-//                            }
-//                        }
-//                    };
-//
-//                    nDialog.setPositiveButtonText("Add Project");
-//                    nDialog.setPositiveButtonTextColor(ContextCompat.getColor(getApplicationContext(),R.color.colorWhite));
-//                    nDialog.setPositiveButtonOnClickDismiss(false); // default : true
-//                    nDialog.setPositiveButtonClickListener(buttonClickListener);
-//
-//
-//// Custom View Setup (View or resourceId)
-//                    nDialog.setCustomView(R.layout.edit_text);
-//
-//                    nDialog.show();
+
+                    final Dialog dialogAddProject = builder.show();
+                    btnCancel = dialogAddProject.findViewById(R.id.btnCancel);
+                    btnCreate = dialogAddProject.findViewById(R.id.btnCreate);
+                    edtAddProjectName = dialogAddProject.findViewById(R.id.edt_add_project_name);
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogAddProject.dismiss();
+                        }
+                    });
+                    btnCreate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addProject(edtAddProjectName.getText().toString());
+                            dialogAddProject.dismiss();
+                        }
+                    });
 
 
                 }
+
             });
         }
 
@@ -231,10 +192,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
 
-                int mId = projectArrayList.get(position).getmId();
-                deleteProject(mId);
-                Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                final int mId = projectArrayList.get(position).getmId();
+                // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View viewDelete = inflater.inflate(R.layout.delete_project_dialog, null);
+                builder.setView(viewDelete);
 
+
+                final Dialog dialogDeleteProject = builder.show();
+                btnCancelDelete = dialogDeleteProject.findViewById(R.id.btnCancelDelete);
+                btnDelete = dialogDeleteProject.findViewById(R.id.btnDelete);
+
+                btnCancelDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialogDeleteProject.dismiss();
+                    }
+                });
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Delete Operation
+                        deleteProject(mId);
+                        Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                        dialogDeleteProject.dismiss();
+                    }
+                });
                 return true;
             }
         });
@@ -279,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }
-        queryProject();
+        queryAllProject();
 
     }
 
@@ -287,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     /**
      * Query all project
      */
-    public void queryProject() {
+    public void queryAllProject() {
         String[] projection = {
                 COLUMN_PROJECT_NAME, _ID, COLUMN_START_DATE, COLUMN_END_DATE
         };
@@ -316,15 +301,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void deleteProject(int id) {
         // Define 'where' part of query.
-        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+        String selection = _ID + " LIKE ?";
 // Specify arguments in placeholder order.
         String[] selectionArgs = {String.valueOf(id)};
 // Issue SQL statement.
-        queryProject();
+        queryAllProject();
 
         int deletedRows = writableProjectDb.delete(TABLE_NAME, selection, selectionArgs);
 
-        queryProject();
+        queryAllProject();
     }
 
 

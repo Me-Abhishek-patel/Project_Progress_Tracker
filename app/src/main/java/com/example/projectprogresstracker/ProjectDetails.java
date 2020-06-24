@@ -1,29 +1,30 @@
 package com.example.projectprogresstracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,34 +34,36 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
 
 public class ProjectDetails extends AppCompatActivity {
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
-    TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget;
+    TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription;
     int mStartYear, mStartMonth, mStartDay, mEndYear, mEndMonth, mEndDay;
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
     int mId;
     SimpleDateFormat sdf, inputFormat;
-    String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate, getmProjectTarget;
+    String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_details);
-        tvProjectName = (TextView) findViewById(R.id.tv_project_name_detail);
-        edtEndDate = (TextView) findViewById(R.id.edt_end_date);
-        edtStartDate = (TextView) findViewById(R.id.edt_start_date);
-        expandablelayout2 = (ExpandableLayout) findViewById(R.id.expandable2);
-        expandCollapseArrow2 = (ImageView) findViewById(R.id.expand_collapse_arrow2);
+
+
+        tvProjectName = findViewById(R.id.tv_project_name_detail);
+        edtEndDate = findViewById(R.id.edt_end_date);
+        edtStartDate = findViewById(R.id.edt_start_date);
+        expandablelayout2 = findViewById(R.id.expandable2);
+        expandCollapseArrow2 = findViewById(R.id.expand_collapse_arrow2);
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
-        tvDaysLeft = (TextView) findViewById(R.id.tv_project_days_left_detail);
-        tvProjectTarget = (TextView) findViewById(R.id.tv_project_target_detail);
+        tvDaysLeft = findViewById(R.id.tv_project_days_left_detail);
+        tvProjectTarget = findViewById(R.id.tv_project_target_detail);
+        tvProjectDescription = findViewById(R.id.edt_project_description_detail);
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -68,10 +71,23 @@ public class ProjectDetails extends AppCompatActivity {
          * retriving intents extras
          */
         Bundle extras = getIntent().getExtras();
-        mId = (int) extras.getInt("mId");
+        mId = extras.getInt("mId");
         queryProject();
 
 
+        /**
+         * onclick for updating desc
+         */
+        tvProjectDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDesc();
+            }
+        });
+
+        /**
+         * start date update
+         */
         edtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +121,7 @@ public class ProjectDetails extends AppCompatActivity {
                                         selection,
                                         selectionArgs);
 
-                                edtStartDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                queryProject();
 
 
                             }
@@ -114,6 +130,10 @@ public class ProjectDetails extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        /**
+         * end date update
+         */
         edtEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +168,6 @@ public class ProjectDetails extends AppCompatActivity {
                                         selectionArgs);
 
                                 queryProject();
-                                edtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
 
                             }
@@ -159,6 +178,9 @@ public class ProjectDetails extends AppCompatActivity {
     }
 
 
+    /**
+     * method to query project detail
+     */
     public void queryProject() {
         String[] projection = {
                 COLUMN_PROJECT_NAME, COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_DESCRIPTION, COLUMN_PROJECT_PROGRESS
@@ -181,12 +203,13 @@ public class ProjectDetails extends AppCompatActivity {
         mProjectStartDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
         mProjectEndDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
         mProjectDescription = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+        tvProjectDescription.setText(mProjectDescription);
         tvProjectName.setText(mProjectName);
         edtStartDate.setText(mProjectStartDate);
         edtEndDate.setText(mProjectEndDate);
 
         tvDaysLeft.setText("Days Left : " + getDaysLeft(mProjectEndDate));
-        tvProjectTarget.setText("Target : " + getTarget(mProjectStartDate, mProjectEndDate) + "%/day");
+        tvProjectTarget.setText("Target : " + getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
 
         cursor.close();
     }
@@ -208,6 +231,13 @@ public class ProjectDetails extends AppCompatActivity {
         }
     }
 
+    /**
+     * method to calculate target
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public String getTarget(String startDate, String endDate) {
         Date mdate = null;
         try {
@@ -227,7 +257,7 @@ public class ProjectDetails extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("0.00");
 
 
-        return String.valueOf(df.format(target));
+        return df.format(target);
 
 
     }
@@ -263,9 +293,61 @@ public class ProjectDetails extends AppCompatActivity {
         return String.valueOf(diffInDays);
     }
 
+    /**
+     * back botton
+     *
+     * @param view
+     */
     public void back(View view) {
         finish();
     }
 
+    /**
+     * description update
+     */
+
+    public void updateDesc() {
+        String currentDesc = tvProjectDescription.getText().toString();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProjectDetails.this);
+        LayoutInflater inflater = (LayoutInflater) ProjectDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.update_description_dialog, null);
+        builder.setView(view);
+
+
+        final Dialog dialogAddProject = builder.show();
+        Button btnCancel = dialogAddProject.findViewById(R.id.btnCancelDesc);
+        Button btnCreate = dialogAddProject.findViewById(R.id.btnUpdateDesc);
+        final EditText edtUpdatetDesc = dialogAddProject.findViewById(R.id.edt_update_desc);
+        edtUpdatetDesc.setText(currentDesc);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogAddProject.dismiss();
+            }
+        });
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String desc = edtUpdatetDesc.getText().toString();
+
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_DESCRIPTION, desc);
+                // Which row to update, based on the title
+                String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+                String[] selectionArgs = {String.valueOf(mId)};
+                int count = writableProjectDb.update(
+                        TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+                queryProject();
+                dialogAddProject.dismiss();
+
+            }
+        });
+
+
+    }
 
 }

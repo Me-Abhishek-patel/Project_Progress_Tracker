@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectange_accent"
+        android:padding="4dp"
+        android:text="Update Description"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/h3"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Enter description or notes here"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/plain_text" />
+
+    <EditText
+        android:id="@+id/edt_update_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_edt"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Description / Notes...\n\n"
+        android:padding="8dp"
+        android:textColor="@color/colorAccent"
+
+        android:textSize="@dimen/plain_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancelDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:backgroundTint="@color/colorWhite"
+            android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+            android:outlineSpotShadowColor="@color/colorAccent"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+
+            />
+
+        <Button
+
+            android:id="@+id/btnUpdateDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+
+            android:background="@color/colorWhite"
+
+            android:text="Update"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+</LinearLayout>

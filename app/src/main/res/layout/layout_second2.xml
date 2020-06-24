@@ -135,7 +135,7 @@
             android:src="@drawable/ic_notes"
 
             />
-        <EditText
+        <TextView
             android:id="@+id/edt_project_description_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
