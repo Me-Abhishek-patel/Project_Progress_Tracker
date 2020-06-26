@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import me.ibrahimsn.lib.OnItemSelectedListener;
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
@@ -43,6 +47,7 @@ public class ProjectDetails extends AppCompatActivity {
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
     int mId;
+    SmoothBottomBar filterSmoothBottomBar;
     SimpleDateFormat sdf, inputFormat;
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
 
@@ -64,6 +69,8 @@ public class ProjectDetails extends AppCompatActivity {
         tvDaysLeft = findViewById(R.id.tv_project_days_left_detail);
         tvProjectTarget = findViewById(R.id.tv_project_target_detail);
         tvProjectDescription = findViewById(R.id.edt_project_description_detail);
+        filterSmoothBottomBar = findViewById(R.id.project_detail_filterAppbar);
+
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -175,6 +182,32 @@ public class ProjectDetails extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+
+        filterSmoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public boolean onItemSelect(int i) {
+                switch (i) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
+                        return true;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
+                        return true;
+                    case 2:
+                        Toast.makeText(getApplicationContext(), "pending clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+
+        });
     }
 
 
@@ -231,6 +264,14 @@ public class ProjectDetails extends AppCompatActivity {
         }
     }
 
+    public void collapse() {
+        if (expandablelayout2.isExpanded()) {
+            expandablelayout2.collapse();
+            expandCollapseArrow2.animate().rotation(180).start();
+        }
+    }
+
+
     /**
      * method to calculate target
      *
@@ -261,6 +302,7 @@ public class ProjectDetails extends AppCompatActivity {
 
 
     }
+
 
     /**
      * method to calculate daysleft
@@ -293,6 +335,7 @@ public class ProjectDetails extends AppCompatActivity {
         return String.valueOf(diffInDays);
     }
 
+
     /**
      * back botton
      *
@@ -301,6 +344,7 @@ public class ProjectDetails extends AppCompatActivity {
     public void back(View view) {
         finish();
     }
+
 
     /**
      * description update

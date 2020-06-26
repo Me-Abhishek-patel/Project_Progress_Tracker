@@ -1,38 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_frame"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProjectDetails">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/top_background"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        >
-        <com.skydoves.expandablelayout.ExpandableLayout
-            android:id="@+id/expandable2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/top_background"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp">
 
-            app:expandable_duration="300"
-            app:expandable_isExpanded="true"
-            app:expandable_parentLayout="@layout/layout_parent2"
-            app:expandable_secondLayout="@layout/layout_second2"
-            app:expandable_showSpinner="false" />
+            <com.skydoves.expandablelayout.ExpandableLayout
+                android:id="@+id/expandable2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:expandable_duration="300"
+                app:expandable_isExpanded="true"
+                app:expandable_parentLayout="@layout/layout_parent2"
+                app:expandable_secondLayout="@layout/layout_second2"
+                app:expandable_showSpinner="false" />
 
 
+        </LinearLayout>
+
+        <me.ibrahimsn.lib.SmoothBottomBar
+            android:id="@+id/project_detail_filterAppbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+
+            android:backgroundTint="@color/colorWhite"
+            android:elevation="16dp"
+            app:backgroundColor="@color/colorWhite"
+            app:cornerRadius="25dp"
+            app:fabAlignmentMode="end"
+            app:fabCradleRoundedCornerRadius="20dp"
+            app:hideOnScroll="true"
+            app:iconTint="@color/colorAccent"
+            app:iconTintActive="@color/colorWhite"
+            app:indicatorColor="@color/colorSecondary"
+            app:itemFontFamily="@font/poppins_medium"
+            app:menu="@menu/filter_menu"
+            app:textColor="@color/colorWhite"
+
+            />
 
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/task_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/colorWhite"
+            android:elevation="16dp"
+            app:backgroundColor="@color/colorWhite"
+            app:cardCornerRadius="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginBottom="8dp"
+
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:onClick="expand_collapse"
+                        android:text="TASKS"
+
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/h4" />
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:src="@drawable/ic_sort_"
+                        app:tint="@color/colorPrimary"
+
+                        />
+
+
+                </RelativeLayout>
+
+                <ListView
+                    android:id="@+id/task_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="true" />
+
+
+            </LinearLayout>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="end|bottom"
+
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorSecondary"
+                android:elevation="100dp"
+                android:src="@drawable/ic_task_add"
+                app:borderWidth="0dp"
+                app:iconTintActive="@color/colorWhite"
+                app:indicatorColor="@color/colorSecondary"
+                app:maxImageSize="35dp" />
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

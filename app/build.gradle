@@ -37,6 +37,6 @@ dependencies {
     implementation 'com.github.mejdi14:Flat-Dialog-Android:1.0.5'
     implementation 'com.github.thomsonreuters:RippleDecoratorView:v1.0.2'
     implementation 'com.github.Haegon:EasyNativeDialog-for-Android:0.3.0'
-
+    implementation 'com.bitvale:switcher:1.1.0'
 
 }

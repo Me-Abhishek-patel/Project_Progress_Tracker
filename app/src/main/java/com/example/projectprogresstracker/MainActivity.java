@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         projectListView.setAdapter(mProjectAdapter);
         projectListView.setEmptyView(findViewById(R.id.emptyListView));
 
-
+        /**
+         * filter handeling
+         */
         filterSmoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
@@ -104,13 +106,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 switch (i) {
                     case 0:
                         Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
+
 
                         return true;
                     case 1:
                         Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
                         return true;
                     case 2:
                         Toast.makeText(getApplicationContext(), "pending clicked", Toast.LENGTH_SHORT).show();
+                        collapse();
                         return true;
                     default:
                         return false;
@@ -241,6 +247,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             expandCollapseArrow.animate().rotation(0).start();
             expandablelayout.expand();
+        }
+    }
+
+    public void collapse() {
+        if (expandablelayout.isExpanded()) {
+            expandablelayout.collapse();
+            expandCollapseArrow.animate().rotation(180).start();
         }
     }
 
