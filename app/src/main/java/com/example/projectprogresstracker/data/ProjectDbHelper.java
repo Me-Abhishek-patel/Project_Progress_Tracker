@@ -15,6 +15,11 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_POINT;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROGRESS;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROJECT_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
@@ -38,10 +43,13 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
             + COLUMN_END_POINT + " INTEGER DEFAULT 100); ";
 
 
-//
-//    String SQL_CREATE_TASK_TABLE = "CREATE TABLE" + TASK_TABLE_NAME + " ( "
-//            + TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-//            +
+    String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + TASK_TABLE_NAME + " ( "
+            + TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_TASK_NAME + " TEXT NOT NULL, "
+            + COLUMN_TASK_END_DATE + " TEXT, "
+            + COLUMN_TASK_DESCRIPTION + " TEXT, "
+            + COLUMN_TASK_PROGRESS + " INTEGER DEFAULT 0, "
+            + COLUMN_TASK_PROJECT_ID + " INTEGER); ";
 
     public ProjectDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,6 +65,7 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(SQL_CREATE_PROJECT_TABLE);
+        db.execSQL(SQL_CREATE_TASK_TABLE);
     }
 
     @Override

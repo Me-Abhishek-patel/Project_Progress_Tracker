@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.skydoves.expandablelayout.ExpandableLayout;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,6 +50,9 @@ public class ProjectDetails extends AppCompatActivity {
     ProjectDbHelper projectDbHelper;
     int mId;
     SmoothBottomBar filterSmoothBottomBar;
+    ListView taskListView;
+    ArrayList<TaskModel> taskArrayList;
+    TaskAdapter mTaskAdapter;
     SimpleDateFormat sdf, inputFormat;
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
 
@@ -64,15 +69,33 @@ public class ProjectDetails extends AppCompatActivity {
         expandablelayout2 = findViewById(R.id.expandable2);
         expandCollapseArrow2 = findViewById(R.id.expand_collapse_arrow2);
         projectDbHelper = new ProjectDbHelper(this);
+
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
         tvDaysLeft = findViewById(R.id.tv_project_days_left_detail);
         tvProjectTarget = findViewById(R.id.tv_project_target_detail);
         tvProjectDescription = findViewById(R.id.edt_project_description_detail);
         filterSmoothBottomBar = findViewById(R.id.project_detail_filterAppbar);
-
+        taskListView = findViewById(R.id.task_listView);
+        taskArrayList = new ArrayList<>();
+        mTaskAdapter = new TaskAdapter(this, taskArrayList);
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+
+        taskListView.setAdapter(mTaskAdapter);
+
+        mTaskAdapter.add(new TaskModel(1, "my task 1", 56));
+        mTaskAdapter.add(new TaskModel(1, "mytask 2", 23));
+        mTaskAdapter.add(new TaskModel(1, "mytask 3", 16));
+        mTaskAdapter.add(new TaskModel(1, "mytask 4", 100));
+        mTaskAdapter.add(new TaskModel(1, "mytask 5", 85));
+        mTaskAdapter.add(new TaskModel(1, "mytask 6", 76));
+        mTaskAdapter.add(new TaskModel(1, "mytask 7", 98));
+        mTaskAdapter.add(new TaskModel(1, "mytask 8", 44));
+        mTaskAdapter.add(new TaskModel(1, "mytask 9", 66));
+        mTaskAdapter.add(new TaskModel(1, "mytask 10", 36));
+
 
         /**
          * retriving intents extras
@@ -91,6 +114,7 @@ public class ProjectDetails extends AppCompatActivity {
                 updateDesc();
             }
         });
+
 
         /**
          * start date update

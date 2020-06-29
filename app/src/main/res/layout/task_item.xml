@@ -4,12 +4,12 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
     android:orientation="horizontal">
 
     <com.bitvale.switcher.SwitcherX
-        android:id="@+id/switcher"
+        android:id="@+id/task_witcher"
         android:layout_width="12dp"
         android:layout_height="wrap_content"
 
@@ -18,11 +18,10 @@
         app:switcher_on_color="@color/colorGreen" />
 
     <TextView
+        android:id="@+id/tv_task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
-
         android:layout_marginLeft="8dp"
         android:text="task name"
         android:textColor="@color/colorAccent"
@@ -31,7 +30,7 @@
         />
 
     <com.skydoves.progressview.ProgressView
-
+        android:id="@+id/pv_task"
         android:layout_width="100dp"
         android:layout_height="10dp"
         android:layout_gravity="end|center"
@@ -45,6 +44,7 @@
         app:progressView_progress="50" />
 
     <TextView
+        android:id="@+id/tv_task_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
