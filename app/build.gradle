@@ -33,10 +33,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0-alpha1'
     implementation "com.github.skydoves:progressview:1.0.8"
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.6'
-    implementation 'com.github.vipulasri:timelineview:1.1.5'
-    implementation 'com.github.mejdi14:Flat-Dialog-Android:1.0.5'
-    implementation 'com.github.thomsonreuters:RippleDecoratorView:v1.0.2'
-    implementation 'com.github.Haegon:EasyNativeDialog-for-Android:0.3.0'
+
     implementation 'com.bitvale:switcher:1.1.0'
 
 }

@@ -24,8 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.projectprogresstracker.data.ProjectDbHelper;
-import com.gohn.nativedialog.ButtonType;
-import com.gohn.nativedialog.NDialog;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<ProjectModel> projectArrayList;
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
-    NDialog nDialog;
+
     EditText edtddProject, edtAddProjectName;
     Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
 
@@ -90,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         projectArrayList = new ArrayList<>();
         mProjectAdapter = new ProjectAdapter(this, projectArrayList);
         calender = Calendar.getInstance();
-        nDialog = new NDialog(MainActivity.this, ButtonType.ONE_BUTTON);
 
 
         projectListView.setAdapter(mProjectAdapter);
