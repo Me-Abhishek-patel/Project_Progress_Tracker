@@ -4,28 +4,30 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
+
     android:paddingTop="18dp"
-    android:paddingBottom="18dp"
-    android:orientation="horizontal">
+    android:paddingBottom="18dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+
         android:orientation="horizontal">
 
-        <com.bitvale.switcher.SwitcherX
+        <Switch
             android:id="@+id/task_witcher"
-            android:layout_width="12dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:theme="@style/Switch"
 
-            app:switcher_icon_color="@color/colorWhite"
-            app:switcher_off_color="@color/colorAccent"
-            app:switcher_on_color="@color/colorGreen" />
+            />
 
         <TextView
             android:id="@+id/tv_task_name"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
@@ -61,8 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="98%"
             android:gravity="right"
+            android:text="98%"
 
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/plain_text"

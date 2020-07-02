@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ImageView expandCollapseArrow;
     ListView projectListView;
     ProjectAdapter mProjectAdapter;
-    FloatingActionButton fab;
+    FloatingActionButton fabAddProject;
     SmoothBottomBar filterSmoothBottomBar;
     ArrayList<ProjectModel> projectArrayList;
     SQLiteDatabase writableProjectDb, readableProjectDb;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         expandCollapseArrow = findViewById(R.id.expand_collapse_arrow);
         bottomAppBar = findViewById(R.id.bottomAppbar);
         projectListView = findViewById(R.id.project_listView);
-        fab = findViewById(R.id.fab_add_project);
+        fabAddProject = findViewById(R.id.fab_add_project);
         filterSmoothBottomBar = findViewById(R.id.filterAppbar);
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
          * fab onClick method
          */
         {
-            fab.setOnClickListener(new View.OnClickListener() {
+            fabAddProject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

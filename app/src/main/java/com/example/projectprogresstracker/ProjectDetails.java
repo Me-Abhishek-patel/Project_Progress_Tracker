@@ -4,11 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.text.DecimalFormat;
@@ -39,9 +43,14 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROJECT_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class ProjectDetails extends AppCompatActivity {
+public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
     TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription;
@@ -54,22 +63,28 @@ public class ProjectDetails extends AppCompatActivity {
     ArrayList<TaskModel> taskArrayList;
     TaskAdapter mTaskAdapter;
     SimpleDateFormat sdf, inputFormat;
+    FloatingActionButton fabAddTask;
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
+    Calendar calender;
 
+    @Override
+    protected void onPostResume() {
+        queryAllTasks();
+        queryProject();
+        super.onPostResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_details);
-
-
+        fabAddTask = findViewById(R.id.fab_add_task);
         tvProjectName = findViewById(R.id.tv_project_name_detail);
         edtEndDate = findViewById(R.id.edt_end_date);
         edtStartDate = findViewById(R.id.edt_start_date);
         expandablelayout2 = findViewById(R.id.expandable2);
         expandCollapseArrow2 = findViewById(R.id.expand_collapse_arrow2);
         projectDbHelper = new ProjectDbHelper(this);
-
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
         tvDaysLeft = findViewById(R.id.tv_project_days_left_detail);
@@ -79,23 +94,55 @@ public class ProjectDetails extends AppCompatActivity {
         taskListView = findViewById(R.id.task_listView);
         taskArrayList = new ArrayList<>();
         mTaskAdapter = new TaskAdapter(this, taskArrayList);
+        calender = Calendar.getInstance();
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
         taskListView.setAdapter(mTaskAdapter);
 
-        mTaskAdapter.add(new TaskModel(1, "my task 1", 56));
-        mTaskAdapter.add(new TaskModel(1, "mytask 2", 23));
-        mTaskAdapter.add(new TaskModel(1, "mytask 3", 16));
-        mTaskAdapter.add(new TaskModel(1, "mytask 4", 100));
-        mTaskAdapter.add(new TaskModel(1, "mytask 5", 85));
-        mTaskAdapter.add(new TaskModel(1, "mytask 6", 76));
-        mTaskAdapter.add(new TaskModel(1, "mytask 7", 98));
-        mTaskAdapter.add(new TaskModel(1, "mytask 8", 44));
-        mTaskAdapter.add(new TaskModel(1, "mytask 9", 66));
-        mTaskAdapter.add(new TaskModel(1, "mytask 10", 36));
 
+/**
+ * handling fab for adding task
+ */
+        fabAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProjectDetails.this);
+                LayoutInflater inflater = (LayoutInflater) ProjectDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.add_task_dialog, null);
+                builder.setView(view);
+
+
+                final Dialog dialogAddProject = builder.show();
+                Button btnCancel = dialogAddProject.findViewById(R.id.btnCancel_task);
+                Button btnCreate = dialogAddProject.findViewById(R.id.btn_add_task);
+                final EditText edtAddTaskName = dialogAddProject.findViewById(R.id.edt_add_task_name);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogAddProject.dismiss();
+                    }
+                });
+                btnCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
+                        addTask(edtAddTaskName.getText().toString());
+                        dialogAddProject.dismiss();
+                    }
+                });
+            }
+        });
+
+
+        /**
+         * expand view
+         */
+        if (!expandablelayout2.isExpanded()) {
+            expandablelayout2.expand();
+            expandCollapseArrow2.animate().rotation(0).start();
+        }
 
         /**
          * retriving intents extras
@@ -103,6 +150,7 @@ public class ProjectDetails extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         mId = extras.getInt("mId");
         queryProject();
+        queryAllTasks();
 
 
         /**
@@ -232,6 +280,46 @@ public class ProjectDetails extends AppCompatActivity {
 
 
         });
+
+
+        /**
+         * on item long press
+         */
+        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
+
+                final int mId = taskArrayList.get(position).getmTaskId();
+                // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProjectDetails.this);
+                LayoutInflater inflater = (LayoutInflater) ProjectDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View viewDelete = inflater.inflate(R.layout.delete_task_dialog, null);
+                builder.setView(viewDelete);
+
+
+                final Dialog dialogDeleteTask = builder.show();
+                Button btnCancelDelete = dialogDeleteTask.findViewById(R.id.btnCancelDelete);
+                Button btnDelete = dialogDeleteTask.findViewById(R.id.btnDelete);
+
+                btnCancelDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialogDeleteTask.dismiss();
+                    }
+                });
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Delete Operation
+                        deleteTask(mId);
+                        Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                        dialogDeleteTask.dismiss();
+                    }
+                });
+                return true;
+            }
+        });
     }
 
 
@@ -295,13 +383,62 @@ public class ProjectDetails extends AppCompatActivity {
         }
     }
 
+    /**
+     * add new task
+     */
+    public void addTask(String projectName) {
+        int mStartYear = calender.get(Calendar.YEAR);
+        int mStartMonth = calender.get(Calendar.MONTH) + 1;
+        int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
+
+        String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_TASK_NAME, projectName);
+        cv.put(COLUMN_TASK_END_DATE, mStartDate);
+        cv.put(COLUMN_TASK_PROJECT_ID, mId);
+        Log.i("mStartDate: ", mStartDate);
+        if (writableProjectDb.insert(TASK_TABLE_NAME, null, cv) == -1) {
+            Toast.makeText(getApplicationContext(), "Project can not be added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
+        }
+        queryAllTasks();
+
+    }
+
+    /**
+     * Query all project
+     */
+    public void queryAllTasks() {
+        String[] projection = {
+                COLUMN_TASK_NAME, TASK_ID, COLUMN_TASK_PROJECT_ID
+        };
+        String selection = COLUMN_TASK_PROJECT_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+
+        Cursor cursor = readableProjectDb.query(
+                TASK_TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        taskArrayList.clear();
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
+            String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
+
+            taskArrayList.add(new TaskModel(id, taskName, 98));
+            mTaskAdapter.notifyDataSetChanged();
+        }
+        cursor.close();
+    }
+
 
     /**
      * method to calculate target
-     *
-     * @param startDate
-     * @param endDate
-     * @return
      */
     public String getTarget(String startDate, String endDate) {
         Date mdate = null;
@@ -330,9 +467,6 @@ public class ProjectDetails extends AppCompatActivity {
 
     /**
      * method to calculate daysleft
-     *
-     * @param dateTill
-     * @return
      */
     public String getDaysLeft(String dateTill) {
         final Calendar c = Calendar.getInstance();
@@ -362,8 +496,6 @@ public class ProjectDetails extends AppCompatActivity {
 
     /**
      * back botton
-     *
-     * @param view
      */
     public void back(View view) {
         finish();
@@ -418,4 +550,25 @@ public class ProjectDetails extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int mId = taskArrayList.get(position).getmTaskId();
+        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(ProjectDetails.this, ProjectDetails.class);
+        myIntent.putExtra("mId", mId); //Optional parameters
+        ProjectDetails.this.startActivity(myIntent);
+    }
+
+    public void deleteTask(int id) {
+        // Define 'where' part of query.
+        String selection = TASK_ID + " LIKE ?";
+// Specify arguments in placeholder order.
+        String[] selectionArgs = {String.valueOf(id)};
+// Issue SQL statement.
+        queryAllTasks();
+
+        int deletedRows = writableProjectDb.delete(TASK_TABLE_NAME, selection, selectionArgs);
+
+        queryAllTasks();
+    }
 }

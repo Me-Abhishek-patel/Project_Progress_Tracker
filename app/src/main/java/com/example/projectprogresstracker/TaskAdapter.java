@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.bitvale.switcher.SwitcherX;
 import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
@@ -39,11 +39,11 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
 
         TaskModel currentTaskModel = mTaskList.get(position);
 
-        SwitcherX switcherX = (SwitcherX) listItem.findViewById(R.id.task_witcher);
+        Switch switcherX = (Switch) listItem.findViewById(R.id.task_witcher);
         if (currentTaskModel.getmTaskProgress() == 100)
-            switcherX.setChecked(true, true);
+            switcherX.setChecked(true);
         else
-            switcherX.setChecked(false, true);
+            switcherX.setChecked(false);
 
         TextView taskName = (TextView) listItem.findViewById(R.id.tv_task_name);
         taskName.setText(currentTaskModel.getmTaskName());
