@@ -29,6 +29,11 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
         mTaskList = resource;
     }
 
+    @Override
+    public TaskModel getItem(int position) {
+        return mTaskList.get(position);
+    }
+
 
     @NonNull
     @Override
@@ -39,16 +44,16 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
 
         TaskModel currentTaskModel = mTaskList.get(position);
 
-        Switch switcherX = (Switch) listItem.findViewById(R.id.task_witcher);
+        Switch switcherX = listItem.findViewById(R.id.task_witcher);
         if (currentTaskModel.getmTaskProgress() == 100)
             switcherX.setChecked(true);
         else
             switcherX.setChecked(false);
 
-        TextView taskName = (TextView) listItem.findViewById(R.id.tv_task_name);
+        TextView taskName = listItem.findViewById(R.id.tv_task_name);
         taskName.setText(currentTaskModel.getmTaskName());
 
-        ProgressView progressView = (ProgressView) listItem.findViewById(R.id.pv_task);
+        ProgressView progressView = listItem.findViewById(R.id.pv_task);
         HighlightView pvHighlightView = progressView.getHighlightView();
         progressView.setProgress((float) currentTaskModel.getmTaskProgress());
         if (currentTaskModel.getmTaskProgress() > 75) {
@@ -60,7 +65,7 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
             pvHighlightView.setColor(ContextCompat.getColor(mContext, R.color.colorSecondary));
         }
 
-        TextView taskProgress = (TextView) listItem.findViewById(R.id.tv_task_progress);
+        TextView taskProgress = listItem.findViewById(R.id.tv_task_progress);
         taskProgress.setText(currentTaskModel.getmTaskProgress() + " %");
 
 

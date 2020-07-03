@@ -95,10 +95,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         taskArrayList = new ArrayList<>();
         mTaskAdapter = new TaskAdapter(this, taskArrayList);
         calender = Calendar.getInstance();
+        taskListView.setOnItemClickListener(this);
+
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-
         taskListView.setAdapter(mTaskAdapter);
 
 
@@ -552,9 +552,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("list item", "list item clicked");
         int mId = taskArrayList.get(position).getmTaskId();
         Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
-        Intent myIntent = new Intent(ProjectDetails.this, ProjectDetails.class);
+        Intent myIntent = new Intent(ProjectDetails.this, TaskDetails.class);
         myIntent.putExtra("mId", mId); //Optional parameters
         ProjectDetails.this.startActivity(myIntent);
     }
@@ -562,9 +563,9 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     public void deleteTask(int id) {
         // Define 'where' part of query.
         String selection = TASK_ID + " LIKE ?";
-// Specify arguments in placeholder order.
+        // Specify arguments in placeholder order.
         String[] selectionArgs = {String.valueOf(id)};
-// Issue SQL statement.
+        // Issue SQL statement.
         queryAllTasks();
 
         int deletedRows = writableProjectDb.delete(TASK_TABLE_NAME, selection, selectionArgs);
