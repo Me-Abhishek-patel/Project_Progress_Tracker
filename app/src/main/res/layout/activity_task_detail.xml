@@ -100,6 +100,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_task_progress_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
@@ -154,7 +155,7 @@
 
 
                     <TextView
-                        android:id="@+id/edt_end_date"
+                        android:id="@+id/edt_task_end_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_date_picker"
@@ -171,7 +172,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_project_days_left_detail"
+                    android:id="@+id/tv_task_days_left_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -183,18 +184,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/h4" />
 
-                <TextView
-                    android:id="@+id/tv_project_target_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="2dp"
-                    android:drawableLeft="@drawable/ic_baseline_check_circle_outline_24"
-                    android:drawablePadding="8dp"
-                    android:gravity="center"
-                    android:text="Target 3.22% /day"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/h4" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -212,12 +202,13 @@
                         />
 
                     <TextView
-                        android:id="@+id/edt_project_description_detail"
+                        android:id="@+id/edt_task_description_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_date_picker"
                         android:fontFamily="@font/poppins_medium"
                         android:hint="Description / Notes...\n"
+
                         android:padding="6dp"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/h4"
@@ -237,7 +228,7 @@
             android:layout_height="match_parent"
 
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
+
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/colorWhite"
