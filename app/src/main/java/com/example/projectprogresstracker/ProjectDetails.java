@@ -27,6 +27,7 @@ import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
+import com.skydoves.progressview.ProgressView;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -45,6 +46,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROJECT_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
@@ -53,7 +55,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
-    TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription;
+    TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription, tvProjectProgress;
     int mStartYear, mStartMonth, mStartDay, mEndYear, mEndMonth, mEndDay;
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
@@ -66,6 +68,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     FloatingActionButton fabAddTask;
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
     Calendar calender;
+    ProgressView projectProgress;
 
     @Override
     protected void onPostResume() {
@@ -87,11 +90,13 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
+        tvProjectProgress = findViewById(R.id.tv_project_progress_detail);
         tvDaysLeft = findViewById(R.id.tv_project_days_left_detail);
         tvProjectTarget = findViewById(R.id.tv_project_target_detail);
         tvProjectDescription = findViewById(R.id.edt_project_description_detail);
         filterSmoothBottomBar = findViewById(R.id.project_detail_filterAppbar);
         taskListView = findViewById(R.id.task_listView);
+        projectProgress = findViewById(R.id.pv_project_progress_detail);
         taskArrayList = new ArrayList<>();
         mTaskAdapter = new TaskAdapter(this, taskArrayList);
         calender = Calendar.getInstance();
@@ -348,10 +353,14 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         mProjectStartDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
         mProjectEndDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
         mProjectDescription = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+        int mProjectProgress = Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS)));
         tvProjectDescription.setText(mProjectDescription);
         tvProjectName.setText(mProjectName);
         edtStartDate.setText(mProjectStartDate);
         edtEndDate.setText(mProjectEndDate);
+        projectProgress.setProgress((float) mProjectProgress);
+        tvProjectProgress.setText(mProjectProgress + "%");
+
 
         tvDaysLeft.setText("Days Left : " + getDaysLeft(mProjectEndDate));
         tvProjectTarget.setText("Target : " + getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
@@ -362,7 +371,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
     /**
      * method to expand and collapse dashoard
-     *
      * @param view
      */
     public void expand_collapse(View view) {
@@ -411,7 +419,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
      */
     public void queryAllTasks() {
         String[] projection = {
-                COLUMN_TASK_NAME, TASK_ID, COLUMN_TASK_PROJECT_ID
+                COLUMN_TASK_NAME, TASK_ID, COLUMN_TASK_PROJECT_ID, COLUMN_TASK_PROGRESS
         };
         String selection = COLUMN_TASK_PROJECT_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(mId)};
@@ -426,13 +434,21 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 null               // The sort order
         );
         taskArrayList.clear();
+        Toast.makeText(getApplicationContext(), "" + cursor.getCount(), Toast.LENGTH_SHORT).show();
+        int sumProgress = 0;
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
             String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
-
-            taskArrayList.add(new TaskModel(id, taskName, 98));
+            String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
+            sumProgress += Integer.parseInt(taskProgres);
+            taskArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
             mTaskAdapter.notifyDataSetChanged();
         }
+
+        if (cursor.getCount() != 0)
+            updateProgress(sumProgress / cursor.getCount());
+
+
         cursor.close();
     }
 
@@ -489,7 +505,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             e.printStackTrace();
         }
         int diffInDays = (int) ((date.getTime() - mdate.getTime()) / (1000 * 60 * 60 * 24));
-
         return String.valueOf(diffInDays);
     }
 
@@ -500,7 +515,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     public void back(View view) {
         finish();
     }
-
 
     /**
      * description update
@@ -571,5 +585,21 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         int deletedRows = writableProjectDb.delete(TASK_TABLE_NAME, selection, selectionArgs);
 
         queryAllTasks();
+    }
+
+    public void updateProgress(int progress) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROJECT_PROGRESS, progress);
+        // Which row to update, based on the title
+        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableProjectDb.update(
+                TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryProject();
+//
     }
 }

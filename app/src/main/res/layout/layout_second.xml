@@ -33,6 +33,7 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/all_project_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="17"
@@ -46,7 +47,7 @@
                     android:layout_height="10dp"
                     app:progressView_autoAnimate="true"
                     app:progressView_colorBackground="@color/colorPrimary"
-                    app:progressView_colorProgress="@color/colorGreen"
+                    app:progressView_colorProgress="@color/colorSkyBlue"
                     app:progressView_max="100"
                     app:progressView_min="0"
                     app:progressView_progress="50" />
@@ -74,6 +75,7 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/completed_project_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="19"
@@ -86,7 +88,7 @@
                     android:layout_height="10dp"
                     app:progressView_autoAnimate="true"
                     app:progressView_colorBackground="@color/colorPrimary"
-                    app:progressView_colorProgress="@color/colorSkyBlue"
+                    app:progressView_colorProgress="@color/colorGreen"
                     app:progressView_max="100"
                     app:progressView_min="0"
                     app:progressView_progress="60" />
@@ -115,6 +117,7 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/pending_project_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="21"

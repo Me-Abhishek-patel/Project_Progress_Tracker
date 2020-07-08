@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
+import com.skydoves.progressview.ProgressView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +38,7 @@ import me.ibrahimsn.lib.SmoothBottomBar;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<ProjectModel> projectArrayList;
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
+    TextView allProjectCount, completedProjectCount, pendingProjectCount;
+    ProgressView pvAllProjects, pvCompletedProjects, pvPendingProject;
 
     EditText edtddProject, edtAddProjectName;
     Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
@@ -88,6 +93,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         projectArrayList = new ArrayList<>();
         mProjectAdapter = new ProjectAdapter(this, projectArrayList);
         calender = Calendar.getInstance();
+        allProjectCount = findViewById(R.id.all_project_count);
+        completedProjectCount = findViewById(R.id.completed_project_count);
+        pendingProjectCount = findViewById(R.id.pending_project_count);
+        pvAllProjects = findViewById(R.id.progressView1);
+        pvCompletedProjects = findViewById(R.id.progressView2);
+        pvPendingProject = findViewById(R.id.progressView3);
 
 
         projectListView.setAdapter(mProjectAdapter);
@@ -104,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     case 0:
                         Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
                         collapse();
-
-
                         return true;
                     case 1:
                         Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
@@ -284,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     public void queryAllProject() {
         String[] projection = {
-                COLUMN_PROJECT_NAME, _ID, COLUMN_START_DATE, COLUMN_END_DATE
+                COLUMN_PROJECT_NAME, _ID, COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_PROJECT_PROGRESS
         };
 
         Cursor cursor = readableProjectDb.query(
@@ -297,14 +306,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 null               // The sort order
         );
         projectArrayList.clear();
+        int completedCount = 0;
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
             String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
             String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
             String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
+            int projectProgress = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS));
+            projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, projectProgress));
+            if (projectProgress == 100)
+                completedCount++;
 
-            projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, 98));
-            mProjectAdapter.notifyDataSetChanged();
+        }
+
+        allProjectCount.setText(cursor.getCount() + "");
+        completedProjectCount.setText(completedCount + "");
+        pendingProjectCount.setText((cursor.getCount() - completedCount) + "");
+        mProjectAdapter.notifyDataSetChanged();
+        pvAllProjects.setProgress(100);
+        if (cursor.getCount() != 0) {
+            pvCompletedProjects.setProgress((float) (completedCount * 100 / cursor.getCount()));
+            pvPendingProject.setProgress((float) (100 - (completedCount * 100 / cursor.getCount())));
         }
         cursor.close();
     }

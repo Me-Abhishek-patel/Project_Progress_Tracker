@@ -6,6 +6,6 @@
     <color name="colorAppBackground">#F3F7FE</color>
     <color name="colorSecondary">#F95465</color>
     <color name="colorGreen">#67D48F</color>
-    <color name="colorSkyBlue">#56C1E8</color>
+    <color name="colorSkyBlue">#FFC107</color>
     <color name="colorWhite">#ffffff</color>
 </resources>

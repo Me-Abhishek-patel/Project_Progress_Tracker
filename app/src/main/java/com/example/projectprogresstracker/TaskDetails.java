@@ -43,6 +43,7 @@ public class TaskDetails extends AppCompatActivity {
     SimpleDateFormat sdf, inputFormat;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +68,11 @@ public class TaskDetails extends AppCompatActivity {
          * handling Seekbar
          */
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int prog;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvTaskProgress.setText(progress + "%");
+                prog = progress;
             }
 
             @Override
@@ -79,6 +82,7 @@ public class TaskDetails extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                updateProgress(prog);
 
             }
         });
@@ -187,6 +191,7 @@ public class TaskDetails extends AppCompatActivity {
             tvTaskProgress.setText(mTaskProgress + "%");
 
             tvDaysLeft.setText("Days Left : " + getDaysLeft(mTaskEndDate));
+            seekBar.setProgress(Integer.parseInt(mTaskProgress));
 
             cursor.close();
         }
@@ -243,6 +248,24 @@ public class TaskDetails extends AppCompatActivity {
     }
 
     /**
+     * method  to update progress
+     */
+    public void updateProgress(int progress) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TASK_PROGRESS, progress);
+        // Which row to update, based on the title
+        String selection = TASK_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableTaskDb.update(
+                TASK_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryTask();
+    }
+
+    /**
      * method to calculate daysleft
      */
     public String getDaysLeft(String dateTill) {
@@ -276,4 +299,6 @@ public class TaskDetails extends AppCompatActivity {
     public void back(View view) {
         finish();
     }
+
+
 }

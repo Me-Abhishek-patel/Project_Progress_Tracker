@@ -1,18 +1,15 @@
 package com.example.projectprogresstracker;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.skydoves.progressview.HighlightView;
@@ -60,13 +57,13 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         /**
          * project Start Date, end date & today's date text views
          */
-        TextView startDate = (TextView) listItem.findViewById(R.id.tv_project_star_date);
+        TextView startDate = listItem.findViewById(R.id.tv_project_star_date);
         startDate.setText(getDay(currentProjectModel.getmProjectStartDate()));
 
-        TextView endDate = (TextView) listItem.findViewById(R.id.tv_project_end_date);
+        TextView endDate = listItem.findViewById(R.id.tv_project_end_date);
         endDate.setText(getDay(currentProjectModel.getmProjectEndDate()));
 
-        TextView todaysDate = (TextView) listItem.findViewById(R.id.tv_todays_date);
+        TextView todaysDate = listItem.findViewById(R.id.tv_todays_date);
         final Calendar c = Calendar.getInstance();
         todaysDate.setText(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
 
@@ -75,7 +72,7 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
          */
 
 
-        TextView daysLeft = (TextView) listItem.findViewById(R.id.tv_days_left);
+        TextView daysLeft = listItem.findViewById(R.id.tv_days_left);
         if (currentProjectModel.getmProjectProgress() == 100) {
             daysLeft.setText(getContext().getText(R.string.completed));
             daysLeft.setGravity(Gravity.END);
@@ -92,13 +89,13 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         /**
          * project name text view
          */
-        TextView name = (TextView) listItem.findViewById(R.id.tv_project_name);
+        TextView name = listItem.findViewById(R.id.tv_project_name);
         name.setText(currentProjectModel.getmProjectName());
 
         /**
          * progress bar for project progress
          */
-        ProgressView progressView = (ProgressView)listItem.findViewById(R.id.pv_project);
+        ProgressView progressView = listItem.findViewById(R.id.pv_project);
         HighlightView pvHighlightView = progressView.getHighlightView();
         progressView.setProgress((float)currentProjectModel.getmProjectProgress());
         if(currentProjectModel.getmProjectProgress()>75) {
@@ -113,7 +110,7 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         /**
          * progress percentage textView
          */
-        TextView progress = (TextView) listItem.findViewById(R.id.tv_project_progress);
+        TextView progress = listItem.findViewById(R.id.tv_project_progress);
         progress.setText(currentProjectModel.getmProjectProgress() + "%");
 
 
@@ -128,14 +125,14 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
             endDate.getBackground().setAlpha(255);
             todaysDate.setBackgroundResource(R.drawable.circle_skyblue);
             endDate.setBackgroundResource(R.drawable.circle_green);
-        } else if (currentProjectModel.getmProjectProgress() > 50) {
+        } else if (currentProjectModel.getmProjectProgress() > 50 && currentProjectModel.getmProjectProgress() != 100) {
             lineToday.getBackground().setAlpha(128);
             todaysDate.getBackground().setAlpha(128);
             lineEnd.getBackground().setAlpha(64);
             endDate.getBackground().setAlpha(64);
             todaysDate.setBackgroundResource(R.drawable.circle_skyblue);
             endDate.setBackgroundResource(R.drawable.circle_accent);
-        } else {
+        } else if (currentProjectModel.getmProjectProgress() < 50 && currentProjectModel.getmProjectProgress() != 100) {
             lineToday.getBackground().setAlpha(64);
             todaysDate.getBackground().setAlpha(64);
             lineEnd.getBackground().setAlpha(64);
