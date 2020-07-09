@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     EditText edtddProject, edtAddProjectName;
     Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
 
+    private final int FILTER_ALL_PROJECTS = 1;
+    private final int FILTER_COMPLETED_PROJECTS = 2;
+    private final int FILTER_PENDING_PROJECTS = 3;
+    private int getFilter = FILTER_ALL_PROJECTS;
     Calendar calender;
 
     @Override
@@ -113,18 +117,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onItemSelect(int i) {
                 switch (i) {
                     case 0:
-                        Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
+
                         collapse();
+                        getFilter = FILTER_ALL_PROJECTS;
+                        queryAllProject();
                         return true;
                     case 1:
-                        Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
+
                         collapse();
+                        getFilter = FILTER_COMPLETED_PROJECTS;
+                        queryAllProject();
                         return true;
                     case 2:
-                        Toast.makeText(getApplicationContext(), "pending clicked", Toast.LENGTH_SHORT).show();
+
                         collapse();
+                        getFilter = FILTER_PENDING_PROJECTS;
+                        queryAllProject();
                         return true;
                     default:
+                        getFilter = FILTER_ALL_PROJECTS;
+                        queryAllProject();
+
+
                         return false;
                 }
             }
@@ -307,16 +321,62 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         );
         projectArrayList.clear();
         int completedCount = 0;
+        cursor.moveToFirst();
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
-            String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
-            String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
-            String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
             int projectProgress = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS));
-            projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, projectProgress));
             if (projectProgress == 100)
                 completedCount++;
 
+        }
+        cursor.close();
+        cursor = readableProjectDb.query(
+                TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        if (getFilter == FILTER_PENDING_PROJECTS) {
+            {
+                while (cursor.moveToNext()) {
+                    int projectProgress = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS));
+                    if (projectProgress != 100) {
+                        int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+                        String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
+                        String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
+                        String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
+                        projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, projectProgress));
+                    }
+
+                }
+                if (projectArrayList.size() == 0)
+                    Toast.makeText(getApplicationContext(), "No pending project found", Toast.LENGTH_SHORT).show();
+            }
+        } else if (getFilter == FILTER_COMPLETED_PROJECTS) {
+            while (cursor.moveToNext()) {
+                int projectProgress = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS));
+                if (projectProgress == 100) {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+                    String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
+                    String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
+                    String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
+                    projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, projectProgress));
+                }
+            }
+            if (projectArrayList.size() == 0)
+                Toast.makeText(getApplicationContext(), "No completed project found", Toast.LENGTH_SHORT).show();
+
+        } else {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+                String projectName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_NAME));
+                String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
+                String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
+                int projectProgress = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS));
+                projectArrayList.add(new ProjectModel(id, projectName, startDate, endDate, projectProgress));
+            }
         }
 
         allProjectCount.setText(cursor.getCount() + "");

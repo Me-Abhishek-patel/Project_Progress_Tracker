@@ -69,6 +69,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
     Calendar calender;
     ProgressView projectProgress;
+    private final int FILTER_ALL_PROJECTS = 1;
+    private final int FILTER_COMPLETED_PROJECTS = 2;
+    private final int FILTER_PENDING_PROJECTS = 3;
+    private int getFilter = FILTER_ALL_PROJECTS;
 
     @Override
     protected void onPostResume() {
@@ -267,15 +271,18 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             public boolean onItemSelect(int i) {
                 switch (i) {
                     case 0:
-                        Toast.makeText(getApplicationContext(), "all projects clicked", Toast.LENGTH_SHORT).show();
+                        getFilter = FILTER_ALL_PROJECTS;
+                        queryAllTasks();
                         collapse();
                         return true;
                     case 1:
-                        Toast.makeText(getApplicationContext(), "completed clicked", Toast.LENGTH_SHORT).show();
+                        getFilter = FILTER_COMPLETED_PROJECTS;
+                        queryAllTasks();
                         collapse();
                         return true;
                     case 2:
-                        Toast.makeText(getApplicationContext(), "pending clicked", Toast.LENGTH_SHORT).show();
+                        getFilter = FILTER_PENDING_PROJECTS;
+                        queryAllTasks();
                         collapse();
                         return true;
                     default:
@@ -434,22 +441,64 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 null               // The sort order
         );
         taskArrayList.clear();
-        Toast.makeText(getApplicationContext(), "" + cursor.getCount(), Toast.LENGTH_SHORT).show();
         int sumProgress = 0;
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
-            String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
             String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
             sumProgress += Integer.parseInt(taskProgres);
-            taskArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
-            mTaskAdapter.notifyDataSetChanged();
+
         }
 
         if (cursor.getCount() != 0)
             updateProgress(sumProgress / cursor.getCount());
-
-
         cursor.close();
+        cursor = readableProjectDb.query(
+                TASK_TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        if (getFilter == FILTER_PENDING_PROJECTS) {
+            {
+                while (cursor.moveToNext()) {
+                    String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
+                    if (Integer.parseInt(taskProgres) != 100) {
+                        int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
+                        String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
+                        taskArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
+                    }
+                }
+                if (taskArrayList.size() == 0)
+                    Toast.makeText(getApplicationContext(), "No pending task found", Toast.LENGTH_SHORT).show();
+
+            }
+        } else if (getFilter == FILTER_COMPLETED_PROJECTS) {
+            while (cursor.moveToNext()) {
+                String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
+                if (Integer.parseInt(taskProgres) == 100) {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
+                    String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
+                    taskArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
+                }
+            }
+            if (taskArrayList.size() == 0)
+                Toast.makeText(getApplicationContext(), "No completed task found", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
+
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(TASK_ID));
+                String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_NAME));
+                taskArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
+
+            }
+        }
+
+        mTaskAdapter.notifyDataSetChanged();
+        cursor.close();
+
     }
 
 
