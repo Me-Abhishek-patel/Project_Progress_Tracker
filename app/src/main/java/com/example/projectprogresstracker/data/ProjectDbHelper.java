@@ -7,6 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_ID;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_TABLE_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_DESCRIPTION;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_END_DATE;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_BUDGET;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
@@ -51,6 +58,14 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
             + COLUMN_TASK_PROGRESS + " INTEGER DEFAULT 0, "
             + COLUMN_TASK_PROJECT_ID + " INTEGER); ";
 
+    String SQL_CREATE_ACTIVITY_TABLE = "CREATE TABLE " + ACTIVITY_TABLE_NAME + " ( "
+            + ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ACTIVITY_NAME + " TEXT NOT NULL, "
+            + COLUMN_ACTIVITY_END_DATE + " TEXT, "
+            + COLUMN_ACTIVITY_DESCRIPTION + " TEXT, "
+            + COLUMN_ACTIVITY_PROGRESS + " INTEGER DEFAULT 0, "
+            + COLUMN_ACTIVITY_TASK_ID + " INTEGER); ";
+
     public ProjectDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -66,6 +81,7 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(SQL_CREATE_PROJECT_TABLE);
         db.execSQL(SQL_CREATE_TASK_TABLE);
+        db.execSQL(SQL_CREATE_ACTIVITY_TABLE);
     }
 
     @Override

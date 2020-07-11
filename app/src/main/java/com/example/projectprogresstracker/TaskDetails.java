@@ -24,7 +24,6 @@ import com.example.projectprogresstracker.data.ProjectDbHelper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
@@ -41,6 +40,7 @@ public class TaskDetails extends AppCompatActivity {
     SeekBar seekBar;
     TextView tvTaskProgress, tvTaskName, tvTaskEndDate, tvTaskDesc, tvDaysLeft;
     SimpleDateFormat sdf, inputFormat;
+    CalcHelper calcHelper;
 
 
 
@@ -53,15 +53,13 @@ public class TaskDetails extends AppCompatActivity {
         writableTaskDb = projectDbHelper.getWritableDatabase();
         readableTaskDb = projectDbHelper.getReadableDatabase();
         seekBar = findViewById(R.id.sb_task_details);
+        calcHelper = new CalcHelper();
 
         tvTaskName = findViewById(R.id.tv_task_name_detail);
         tvTaskEndDate = findViewById(R.id.edt_task_end_date);
         tvTaskProgress = findViewById(R.id.tv_task_progress_detail);
         tvTaskDesc = findViewById(R.id.edt_task_description_detail);
         tvDaysLeft = findViewById(R.id.tv_task_days_left_detail);
-
-        sdf = new SimpleDateFormat("yyyy-MM-dd");
-        inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
         /**
@@ -190,7 +188,7 @@ public class TaskDetails extends AppCompatActivity {
             tvTaskEndDate.setText(mTaskEndDate);
             tvTaskProgress.setText(mTaskProgress + "%");
 
-            tvDaysLeft.setText("Days Left : " + getDaysLeft(mTaskEndDate));
+            tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mTaskEndDate));
             seekBar.setProgress(Integer.parseInt(mTaskProgress));
 
             cursor.close();
@@ -265,33 +263,6 @@ public class TaskDetails extends AppCompatActivity {
         queryTask();
     }
 
-    /**
-     * method to calculate daysleft
-     */
-    public String getDaysLeft(String dateTill) {
-        final Calendar c = Calendar.getInstance();
-        int mStartYear = c.get(Calendar.YEAR);
-        int mStartMonth = c.get(Calendar.MONTH) + 1;
-        int mStartDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-        String mDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
-        Date mdate = null;
-        try {
-            mdate = inputFormat.parse(mDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date = null;
-        try {
-            date = inputFormat.parse(dateTill);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int diffInDays = (int) ((date.getTime() - mdate.getTime()) / (1000 * 60 * 60 * 24));
-
-        return String.valueOf(diffInDays);
-    }
 
     /**
      * back botton

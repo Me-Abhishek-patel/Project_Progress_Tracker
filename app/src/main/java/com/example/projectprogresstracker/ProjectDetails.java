@@ -23,18 +23,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectprogresstracker.data.DbModifier;
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
 import com.skydoves.progressview.ProgressView;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -68,6 +67,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     FloatingActionButton fabAddTask;
     String mProjectName, mProjectDescription, mProjectStartDate, mProjectEndDate;
     Calendar calender;
+    CalcHelper calcHelper;
+    DbModifier dbModifier;
     ProgressView projectProgress;
     private final int FILTER_ALL_PROJECTS = 1;
     private final int FILTER_COMPLETED_PROJECTS = 2;
@@ -91,6 +92,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         edtStartDate = findViewById(R.id.edt_start_date);
         expandablelayout2 = findViewById(R.id.expandable2);
         expandCollapseArrow2 = findViewById(R.id.expand_collapse_arrow2);
+        dbModifier = new DbModifier(this);
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
@@ -105,6 +107,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         mTaskAdapter = new TaskAdapter(this, taskArrayList);
         calender = Calendar.getInstance();
         taskListView.setOnItemClickListener(this);
+        calcHelper = new CalcHelper();
 
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -324,9 +327,12 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     @Override
                     public void onClick(View v) {
                         // Delete Operation
-                        deleteTask(mId);
+                        queryAllTasks();
+                        dbModifier.deleteTask(mId);
                         Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                        queryAllTasks();
                         dialogDeleteTask.dismiss();
+
                     }
                 });
                 return true;
@@ -369,8 +375,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         tvProjectProgress.setText(mProjectProgress + "%");
 
 
-        tvDaysLeft.setText("Days Left : " + getDaysLeft(mProjectEndDate));
-        tvProjectTarget.setText("Target : " + getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
+        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mProjectEndDate));
+        tvProjectTarget.setText("Target : " + calcHelper.getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
 
         cursor.close();
     }
@@ -502,60 +508,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     }
 
 
-    /**
-     * method to calculate target
-     */
-    public String getTarget(String startDate, String endDate) {
-        Date mdate = null;
-        try {
-            mdate = inputFormat.parse(startDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date = null;
-        try {
-            date = inputFormat.parse(endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int diffInDays = (int) ((date.getTime() - mdate.getTime()) / (1000 * 60 * 60 * 24));
 
-        double target = 100.00 / (Double.valueOf(diffInDays));
-        DecimalFormat df = new DecimalFormat("0.00");
-
-
-        return df.format(target);
-
-
-    }
-
-
-    /**
-     * method to calculate daysleft
-     */
-    public String getDaysLeft(String dateTill) {
-        final Calendar c = Calendar.getInstance();
-        int mStartYear = c.get(Calendar.YEAR);
-        int mStartMonth = c.get(Calendar.MONTH) + 1;
-        int mStartDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-        String mDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
-        Date mdate = null;
-        try {
-            mdate = inputFormat.parse(mDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date = null;
-        try {
-            date = inputFormat.parse(dateTill);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int diffInDays = (int) ((date.getTime() - mdate.getTime()) / (1000 * 60 * 60 * 24));
-        return String.valueOf(diffInDays);
-    }
 
 
     /**
@@ -623,18 +576,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         ProjectDetails.this.startActivity(myIntent);
     }
 
-    public void deleteTask(int id) {
-        // Define 'where' part of query.
-        String selection = TASK_ID + " LIKE ?";
-        // Specify arguments in placeholder order.
-        String[] selectionArgs = {String.valueOf(id)};
-        // Issue SQL statement.
-        queryAllTasks();
-
-        int deletedRows = writableProjectDb.delete(TASK_TABLE_NAME, selection, selectionArgs);
-
-        queryAllTasks();
-    }
 
     public void updateProgress(int progress) {
         ContentValues values = new ContentValues();
