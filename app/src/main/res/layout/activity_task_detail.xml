@@ -281,7 +281,7 @@
                 </RelativeLayout>
 
                 <ListView
-                    android:id="@+id/task_listView"
+                    android:id="@+id/activity_listView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="true" />

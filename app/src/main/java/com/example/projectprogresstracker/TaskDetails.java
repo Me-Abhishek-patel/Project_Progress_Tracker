@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +21,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
@@ -38,17 +41,20 @@ public class TaskDetails extends AppCompatActivity {
     SQLiteDatabase writableTaskDb, readableTaskDb;
     ProjectDbHelper projectDbHelper;
     SeekBar seekBar;
+    ListView taskListView;
+    ArrayList<TaskModel> taskArrayList;
+    TaskAdapter mTaskAdapter;
     TextView tvTaskProgress, tvTaskName, tvTaskEndDate, tvTaskDesc, tvDaysLeft;
     SimpleDateFormat sdf, inputFormat;
     CalcHelper calcHelper;
-
+    FloatingActionButton fabAddActivity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
-
+        fabAddActivity = findViewById(R.id.fab_add_activity);
         projectDbHelper = new ProjectDbHelper(this);
         writableTaskDb = projectDbHelper.getWritableDatabase();
         readableTaskDb = projectDbHelper.getReadableDatabase();
@@ -60,6 +66,46 @@ public class TaskDetails extends AppCompatActivity {
         tvTaskProgress = findViewById(R.id.tv_task_progress_detail);
         tvTaskDesc = findViewById(R.id.edt_task_description_detail);
         tvDaysLeft = findViewById(R.id.tv_task_days_left_detail);
+        taskListView = findViewById(R.id.activity_listView);
+        taskArrayList = new ArrayList<>();
+        mTaskAdapter = new TaskAdapter(this, taskArrayList);
+        taskListView.setAdapter(mTaskAdapter);
+
+
+/**
+ * handling fab for adding task
+ */
+        fabAddActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(TaskDetails.this);
+                LayoutInflater inflater = (LayoutInflater) TaskDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.add_activity_dialog, null);
+                builder.setView(view);
+
+
+                final Dialog dialogAddProject = builder.show();
+                Button btnCancel = dialogAddProject.findViewById(R.id.btnCancel_task);
+                Button btnCreate = dialogAddProject.findViewById(R.id.btn_add_task);
+                final EditText edtAddTaskName = dialogAddProject.findViewById(R.id.edt_add_task_name);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogAddProject.dismiss();
+                    }
+                });
+                btnCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
+                        taskArrayList.add(new TaskModel(1, edtAddTaskName.getText().toString(), 35));
+                        mTaskAdapter.notifyDataSetChanged();
+//                        addTask(edtAddTaskName.getText().toString());
+                        dialogAddProject.dismiss();
+                    }
+                });
+            }
+        });
 
 
         /**
@@ -67,6 +113,7 @@ public class TaskDetails extends AppCompatActivity {
          */
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int prog;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvTaskProgress.setText(progress + "%");
