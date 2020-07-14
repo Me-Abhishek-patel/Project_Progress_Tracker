@@ -28,6 +28,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_ID;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_TABLE_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_END_DATE;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
@@ -42,11 +48,12 @@ public class TaskDetails extends AppCompatActivity {
     ProjectDbHelper projectDbHelper;
     SeekBar seekBar;
     ListView taskListView;
-    ArrayList<TaskModel> taskArrayList;
+    ArrayList<TaskModel> activityArrayList;
     TaskAdapter mTaskAdapter;
     TextView tvTaskProgress, tvTaskName, tvTaskEndDate, tvTaskDesc, tvDaysLeft;
     SimpleDateFormat sdf, inputFormat;
     CalcHelper calcHelper;
+    Calendar calender;
     FloatingActionButton fabAddActivity;
 
 
@@ -60,15 +67,15 @@ public class TaskDetails extends AppCompatActivity {
         readableTaskDb = projectDbHelper.getReadableDatabase();
         seekBar = findViewById(R.id.sb_task_details);
         calcHelper = new CalcHelper();
-
+        calender = Calendar.getInstance();
         tvTaskName = findViewById(R.id.tv_task_name_detail);
         tvTaskEndDate = findViewById(R.id.edt_task_end_date);
         tvTaskProgress = findViewById(R.id.tv_task_progress_detail);
         tvTaskDesc = findViewById(R.id.edt_task_description_detail);
         tvDaysLeft = findViewById(R.id.tv_task_days_left_detail);
         taskListView = findViewById(R.id.activity_listView);
-        taskArrayList = new ArrayList<>();
-        mTaskAdapter = new TaskAdapter(this, taskArrayList);
+        activityArrayList = new ArrayList<>();
+        mTaskAdapter = new TaskAdapter(this, activityArrayList);
         taskListView.setAdapter(mTaskAdapter);
 
 
@@ -98,9 +105,9 @@ public class TaskDetails extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        taskArrayList.add(new TaskModel(1, edtAddTaskName.getText().toString(), 35));
+                        activityArrayList.add(new TaskModel(1, edtAddTaskName.getText().toString(), 35));
                         mTaskAdapter.notifyDataSetChanged();
-//                        addTask(edtAddTaskName.getText().toString());
+                        addActivity(edtAddTaskName.getText().toString());
                         dialogAddProject.dismiss();
                     }
                 });
@@ -193,7 +200,7 @@ public class TaskDetails extends AppCompatActivity {
          */
         Bundle extras = getIntent().getExtras();
         mId = extras.getInt("mId");
-
+        queryAllActivity();
         queryTask();
     }
 
@@ -310,6 +317,65 @@ public class TaskDetails extends AppCompatActivity {
         queryTask();
     }
 
+    public void addActivity(String activityName) {
+        int mStartYear = calender.get(Calendar.YEAR);
+        int mStartMonth = calender.get(Calendar.MONTH) + 1;
+        int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
+
+        String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_ACTIVITY_NAME, activityName);
+        cv.put(COLUMN_ACTIVITY_END_DATE, mStartDate);
+        cv.put(COLUMN_ACTIVITY_TASK_ID, mId);
+
+        if (writableTaskDb.insert(ACTIVITY_TABLE_NAME, null, cv) == -1) {
+            Toast.makeText(getApplicationContext(), "activity can not be added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), activityName + " Added", Toast.LENGTH_SHORT).show();
+        }
+        queryAllActivity();
+
+    }
+
+    /**
+     * Query all project
+     */
+    public void queryAllActivity() {
+        String[] projection = {
+                COLUMN_ACTIVITY_NAME, ACTIVITY_ID, COLUMN_ACTIVITY_TASK_ID, COLUMN_ACTIVITY_PROGRESS
+        };
+        String selection = COLUMN_ACTIVITY_TASK_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+
+        Cursor cursor = readableTaskDb.query(
+                ACTIVITY_TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        activityArrayList.clear();
+        int sumProgress = 0;
+
+        while (cursor.moveToNext()) {
+
+            String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ACTIVITY_PROGRESS));
+            sumProgress += Integer.parseInt(taskProgres);
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(ACTIVITY_ID));
+            String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ACTIVITY_NAME));
+            activityArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
+
+        }
+        if (cursor.getCount() != 0)
+            updateProgress(sumProgress / cursor.getCount());
+
+
+        mTaskAdapter.notifyDataSetChanged();
+        cursor.close();
+
+    }
 
     /**
      * back botton
