@@ -91,7 +91,7 @@
                     app:progressView_colorProgress="@color/colorGreen"
                     app:progressView_max="100"
                     app:progressView_min="0"
-                    app:progressView_progress="60" />
+                    app:progressView_progress="0" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                     app:progressView_colorProgress="@color/colorSecondary"
                     app:progressView_max="100"
                     app:progressView_min="0"
-                    app:progressView_progress="70" />
+                    app:progressView_progress="0" />
 
                 <TextView
                     android:layout_width="match_parent"

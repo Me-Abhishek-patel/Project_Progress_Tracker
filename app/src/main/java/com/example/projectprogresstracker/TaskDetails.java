@@ -4,11 +4,13 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -41,7 +43,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class TaskDetails extends AppCompatActivity {
+public class TaskDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
@@ -56,6 +58,12 @@ public class TaskDetails extends AppCompatActivity {
     Calendar calender;
     FloatingActionButton fabAddActivity;
 
+    @Override
+    protected void onPostResume() {
+        queryAllActivity();
+        queryTask();
+        super.onPostResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +83,7 @@ public class TaskDetails extends AppCompatActivity {
         tvDaysLeft = findViewById(R.id.tv_task_days_left_detail);
         taskListView = findViewById(R.id.activity_listView);
         activityArrayList = new ArrayList<>();
+        taskListView.setOnItemClickListener(this);
         mTaskAdapter = new TaskAdapter(this, activityArrayList);
         taskListView.setAdapter(mTaskAdapter);
 
@@ -384,5 +393,14 @@ public class TaskDetails extends AppCompatActivity {
         finish();
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int mId = activityArrayList.get(position).getmTaskId();
+        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(TaskDetails.this, Activity_details.class);
+        myIntent.putExtra("mId", mId); //Optional parameters
+        TaskDetails.this.startActivity(myIntent);
+    }
 
 }
