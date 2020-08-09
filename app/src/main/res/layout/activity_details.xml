@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".Activity_details">
 
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -81,9 +82,27 @@
                     android:layout_centerVertical="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
+                    android:onClick="loadOptions"
                     android:src="@drawable/ic_more"
 
                     />
+
+                <Spinner
+                    android:id="@+id/activity_options"
+
+                    android:layout_width="149dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.502"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.498" />
 
 
             </RelativeLayout>

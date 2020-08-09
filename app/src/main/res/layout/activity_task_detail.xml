@@ -136,6 +136,19 @@
                     android:layout_height="wrap_content"
                     android:visibility="visible" />
 
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/pv_task_progress_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="invisible"
+                    app:progressView_autoAnimate="true"
+                    app:progressView_colorBackground="@color/colorAccent"
+                    app:progressView_colorProgress="@color/colorSecondary"
+                    app:progressView_highlighting="true"
+                    app:progressView_max="100"
+                    app:progressView_min="0" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

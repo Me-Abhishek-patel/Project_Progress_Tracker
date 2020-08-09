@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.skydoves.progressview.ProgressView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +58,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     CalcHelper calcHelper;
     Calendar calender;
     FloatingActionButton fabAddActivity;
+    ProgressView taskProgressView;
 
     @Override
     protected void onPostResume() {
@@ -76,6 +78,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         seekBar = findViewById(R.id.sb_task_details);
         calcHelper = new CalcHelper();
         calender = Calendar.getInstance();
+        taskProgressView = findViewById(R.id.pv_task_progress_detail);
         tvTaskName = findViewById(R.id.tv_task_name_detail);
         tvTaskEndDate = findViewById(R.id.edt_task_end_date);
         tvTaskProgress = findViewById(R.id.tv_task_progress_detail);
@@ -253,6 +256,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
 
             tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mTaskEndDate));
             seekBar.setProgress(Integer.parseInt(mTaskProgress));
+            taskProgressView.setProgress(Integer.parseInt(mTaskProgress));
 
             cursor.close();
         }
@@ -367,6 +371,13 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         );
         activityArrayList.clear();
         int sumProgress = 0;
+        if (cursor.getCount() <= 0) {
+            seekBar.setVisibility(View.VISIBLE);
+            taskProgressView.setVisibility(View.GONE);
+        } else {
+            seekBar.setVisibility(View.GONE);
+            taskProgressView.setVisibility(View.VISIBLE);
+        }
 
         while (cursor.moveToNext()) {
 

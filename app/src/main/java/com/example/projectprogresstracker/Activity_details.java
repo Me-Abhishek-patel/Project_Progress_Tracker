@@ -5,7 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,13 +23,15 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
 
-public class Activity_details extends AppCompatActivity {
+public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
     ProjectDbHelper projectDbHelper;
     SeekBar seekBar;
     TextView tvActivityName, tvActivityProgress;
+    Spinner options;
 
+    String[] country = {"Rename", "Delete"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,13 @@ public class Activity_details extends AppCompatActivity {
         tvActivityName = findViewById(R.id.tv_activity_name_detail);
         tvActivityProgress = findViewById(R.id.tv_activity_progress_detail);
         seekBar = findViewById(R.id.sb_activity_details);
+        options = (Spinner) findViewById(R.id.activity_options);
+        options.setOnItemSelectedListener(this);
+
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, country);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        options.setAdapter(aa);
         /**
          * retriving intents extras
          */
@@ -139,6 +151,20 @@ public class Activity_details extends AppCompatActivity {
      */
     public void back(View view) {
         finish();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getApplicationContext(), country[position], Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public void loadOptions(View view) {
+        options.setVisibility(View.VISIBLE);
     }
 }
 
