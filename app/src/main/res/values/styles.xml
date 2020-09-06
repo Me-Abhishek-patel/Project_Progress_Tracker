@@ -8,6 +8,7 @@
         <item name="android:windowBackground">@color/colorAppBackground</item>
         <item name="android:actionButtonStyle">@style/ActionButton</item>
         <item name="android:textViewStyle">@style/PoppinsTextViewStyle</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
 
     </style>

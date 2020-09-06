@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ProjectDbHelper projectDbHelper;
     TextView allProjectCount, completedProjectCount, pendingProjectCount;
     ProgressView pvAllProjects, pvCompletedProjects, pvPendingProject;
+    SharedPreferences sharedPreferences;
 
     EditText edtddProject, edtAddProjectName;
     Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         projectDbHelper = new ProjectDbHelper(this);
         writableProjectDb = projectDbHelper.getWritableDatabase();
         readableProjectDb = projectDbHelper.getReadableDatabase();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         projectListView.setOnItemClickListener(this);
         projectArrayList = new ArrayList<>();
         mProjectAdapter = new ProjectAdapter(this, projectArrayList);
@@ -161,7 +165,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Toast.makeText(getApplicationContext(), "Task clicked", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menuSettings:
-                        Toast.makeText(getApplicationContext(), "settings clicked", Toast.LENGTH_SHORT).show();
+                        Intent openSettingIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(openSettingIntent);
                         return true;
                     default:
                         return false;
@@ -271,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void collapse() {
-        if (expandablelayout.isExpanded()) {
+        if (expandablelayout.isExpanded() && sharedPreferences.getBoolean("collapse", true)) {
             expandablelayout.collapse();
             expandCollapseArrow.animate().rotation(180).start();
         }

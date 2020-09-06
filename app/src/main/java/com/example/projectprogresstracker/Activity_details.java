@@ -43,7 +43,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         tvActivityName = findViewById(R.id.tv_activity_name_detail);
         tvActivityProgress = findViewById(R.id.tv_activity_progress_detail);
         seekBar = findViewById(R.id.sb_activity_details);
-        options = (Spinner) findViewById(R.id.activity_options);
+        options = findViewById(R.id.activity_options);
         options.setOnItemSelectedListener(this);
 
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, country);
@@ -164,6 +164,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
     }
 
     public void loadOptions(View view) {
+
         options.setVisibility(View.VISIBLE);
     }
 }

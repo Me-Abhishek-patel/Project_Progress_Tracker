@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.example.projectprogresstracker.data.DbModifier;
 import com.example.projectprogresstracker.data.ProjectContract;
@@ -69,6 +71,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     Calendar calender;
     CalcHelper calcHelper;
     DbModifier dbModifier;
+    SharedPreferences sharedPreferences;
     ProgressView projectProgress;
     private final int FILTER_ALL_PROJECTS = 1;
     private final int FILTER_COMPLETED_PROJECTS = 2;
@@ -108,6 +111,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         calender = Calendar.getInstance();
         taskListView.setOnItemClickListener(this);
         calcHelper = new CalcHelper();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -398,7 +402,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void collapse() {
-        if (expandablelayout2.isExpanded()) {
+        if (expandablelayout2.isExpanded() && sharedPreferences.getBoolean("collapse", true)) {
             expandablelayout2.collapse();
             expandCollapseArrow2.animate().rotation(180).start();
         }

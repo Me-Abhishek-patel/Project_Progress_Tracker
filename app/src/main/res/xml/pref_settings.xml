@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="dark_mode"
+        android:summaryOff="Disabled"
+        android:summaryOn="Enabled"
+        android:title="Dark Mode" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="collapse"
+        android:summaryOff="Manual"
+        android:summaryOn="Automatic"
+        android:title="Dashboard Collapse" />
+
+
+</PreferenceScreen>
