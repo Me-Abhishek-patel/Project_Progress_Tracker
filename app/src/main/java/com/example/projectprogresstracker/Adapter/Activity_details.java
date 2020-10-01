@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.Adapter;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectprogresstracker.R;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_ID;

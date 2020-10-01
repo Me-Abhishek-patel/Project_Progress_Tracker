@@ -3,11 +3,9 @@ package com.example.projectprogresstracker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,8 +22,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import com.example.projectprogresstracker.Adapter.ProjectAdapter;
+import com.example.projectprogresstracker.Adapter.ProjectDetails;
+import com.example.projectprogresstracker.Architecture.ProjectRepository;
+import com.example.projectprogresstracker.Architecture.ProjectViewModel;
+import com.example.projectprogresstracker.Entity.Project;
+import com.example.projectprogresstracker.Ui.SettingsActivity;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,16 +40,10 @@ import com.skydoves.progressview.ProgressView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
-
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -57,25 +57,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ProjectAdapter mProjectAdapter;
     FloatingActionButton fabAddProject;
     SmoothBottomBar filterSmoothBottomBar;
-    ArrayList<ProjectModel> projectArrayList;
+       private final int FILTER_ALL_PROJECTS = 1;
     SQLiteDatabase writableProjectDb, readableProjectDb;
     ProjectDbHelper projectDbHelper;
     TextView allProjectCount, completedProjectCount, pendingProjectCount;
     ProgressView pvAllProjects, pvCompletedProjects, pvPendingProject;
     SharedPreferences sharedPreferences;
-
+    ArrayList<Project> projectArrayList;
     EditText edtddProject, edtAddProjectName;
     Button btnCreate, btnCancel, btnCancelDelete, btnDelete;
-
-    private final int FILTER_ALL_PROJECTS = 1;
+    ProjectRepository projectRepository;
     private final int FILTER_COMPLETED_PROJECTS = 2;
     private final int FILTER_PENDING_PROJECTS = 3;
     private int getFilter = FILTER_ALL_PROJECTS;
     Calendar calender;
+    ProjectViewModel projectViewModel;
 
     @Override
     protected void onPostResume() {
-        queryAllProject();
+      //  queryAllProject();
         super.onPostResume();
     }
 
@@ -87,7 +87,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         /**
          * initialisation of variables
          */
-        expandablelayout = findViewById(R.id.expandable);
+
+        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
+        projectViewModel.getProjectModels().observe(this, new Observer<List<Project>>() {
+            @Override
+            public void onChanged(List<Project> projects) {
+                projectArrayList =(ArrayList<Project>) projects;
+                mProjectAdapter = new ProjectAdapter(MainActivity.this, projects);
+                projectListView.setAdapter(mProjectAdapter);
+                for(int i = 0; i < projects.size() ; i++){
+                    Log.d("Checking", projects.get(i).getProjectName());
+                }
+            }
+        });
+
+        //instance = ProjectDataBase.getInstance(this);
+        projectRepository = new ProjectRepository(getApplication());
+            expandablelayout = findViewById(R.id.expandable);
         expandCollapseArrow = findViewById(R.id.expand_collapse_arrow);
         bottomAppBar = findViewById(R.id.bottomAppbar);
         projectListView = findViewById(R.id.project_listView);
@@ -124,23 +140,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                         collapse();
                         getFilter = FILTER_ALL_PROJECTS;
-                        queryAllProject();
+                        //queryAllProject();
                         return true;
                     case 1:
 
                         collapse();
                         getFilter = FILTER_COMPLETED_PROJECTS;
-                        queryAllProject();
+                       // queryAllProject();
                         return true;
                     case 2:
 
                         collapse();
                         getFilter = FILTER_PENDING_PROJECTS;
-                        queryAllProject();
+                        //queryAllProject();
                         return true;
                     default:
                         getFilter = FILTER_ALL_PROJECTS;
-                        queryAllProject();
+                       // queryAllProject();
 
 
                         return false;
@@ -173,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
-        queryAllProject();
+       // queryAllProject();
 
 
         /**
@@ -223,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
 
-                final int mId = projectArrayList.get(position).getmId();
+                final int mId = projectArrayList.get(position).getId();
                 // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -287,12 +303,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * add new project
      */
     public void addProject(String projectName) {
-        int mStartYear = calender.get(Calendar.YEAR);
-        int mStartMonth = calender.get(Calendar.MONTH) + 1;
-        int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
-
-        String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
-        ContentValues cv = new ContentValues();
+        /*ContentValues cv = new ContentValues();
         cv.put(COLUMN_PROJECT_NAME, projectName);
         cv.put(COLUMN_START_DATE, mStartDate);
         cv.put(COLUMN_END_DATE, mStartDate);
@@ -302,7 +313,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }
-        queryAllProject();
+       */// queryAllProject();
+      // new PopulateDbAsyncTask(projectName).execute();
+        int mStartYear = calender.get(Calendar.YEAR);
+        int mStartMonth = calender.get(Calendar.MONTH) + 1;
+        int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
+
+        String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
+
+        projectViewModel.insert(new Project(projectName, mStartDate, mStartDate, 0));
+        //projectArrayList = (ArrayList<ProjectModel>) projectRepository.getAllProjects();
+        //projectArrayList.add(new ProjectModel(projectName, mStartDate, mStartDate, 0));
+
+      //  projectListView.setAdapter(mProjectAdapter);
+       // Log.d("Checking...", projectRepository.getAllProjects().size()+"");
+        //Toast.makeText(this, "Total projects: "+projectRepository.getAllProjects().size(), Toast.LENGTH_SHORT).show();
+
+
+      // mProjectAdapter.notifyDataSetChanged();
 
     }
 
@@ -310,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     /**
      * Query all project
      */
-    public void queryAllProject() {
+    /*public void queryAllProject() {
         String[] projection = {
                 COLUMN_PROJECT_NAME, _ID, COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_PROJECT_PROGRESS
         };
@@ -395,18 +423,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         cursor.close();
     }
-
+*/
     public void deleteProject(int id) {
         // Define 'where' part of query.
-        String selection = _ID + " LIKE ?";
+       // String selection = _ID + " LIKE ?";
 // Specify arguments in placeholder order.
-        String[] selectionArgs = {String.valueOf(id)};
+        //String[] selectionArgs = {String.valueOf(id)};
 // Issue SQL statement.
-        queryAllProject();
+  //      queryAllProject();
 
-        int deletedRows = writableProjectDb.delete(TABLE_NAME, selection, selectionArgs);
+      //  int deletedRows = writableProjectDb.delete(TABLE_NAME, selection, selectionArgs);
 
-        queryAllProject();
+    //    queryAllProject();
     }
 
 
@@ -415,12 +443,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int mId = projectArrayList.get(position).getmId();
-        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "" +, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
-        myIntent.putExtra("mId", mId); //Optional parameters
+        myIntent.putExtra("key", position); //Optional parameters
         MainActivity.this.startActivity(myIntent);
     }
-
-
 }
+
+   /* private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        String projectName;
+        private PopulateDbAsyncTask(String projectName) {
+            this.projectName = projectName;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
+}*/

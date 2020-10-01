@@ -3,9 +3,9 @@
 
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_settings"
-    android:name="com.example.projectprogresstracker.SettingsFragment"
+    android:name="com.example.projectprogresstracker.Ui.SettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".Ui.SettingsActivity">
 
 </fragment>

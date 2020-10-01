@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.Adapter;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +22,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import com.example.projectprogresstracker.Architecture.ProjectRepository;
+import com.example.projectprogresstracker.Architecture.ProjectViewModel;
+import com.example.projectprogresstracker.Architecture.TaskViewModel;
+import com.example.projectprogresstracker.CalcHelper;
+import com.example.projectprogresstracker.Entity.Project;
+import com.example.projectprogresstracker.Entity.Task;
+import com.example.projectprogresstracker.R;
 import com.example.projectprogresstracker.data.DbModifier;
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
@@ -36,24 +44,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROGRESS;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROJECT_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
 public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    ProjectViewModel projectViewModel;
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
     TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription, tvProjectProgress;
@@ -63,7 +65,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     int mId;
     SmoothBottomBar filterSmoothBottomBar;
     ListView taskListView;
-    ArrayList<TaskModel> taskArrayList;
+    ArrayList<Task> taskArrayList;
     TaskAdapter mTaskAdapter;
     SimpleDateFormat sdf, inputFormat;
     FloatingActionButton fabAddTask;
@@ -73,15 +75,19 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     DbModifier dbModifier;
     SharedPreferences sharedPreferences;
     ProgressView projectProgress;
+    ArrayList<Project> modelArrayList;
+    ProjectRepository projectRepository;
     private final int FILTER_ALL_PROJECTS = 1;
     private final int FILTER_COMPLETED_PROJECTS = 2;
     private final int FILTER_PENDING_PROJECTS = 3;
     private int getFilter = FILTER_ALL_PROJECTS;
+    int Index;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onPostResume() {
         queryAllTasks();
-        queryProject();
+        //queryProject();
         super.onPostResume();
     }
 
@@ -89,6 +95,20 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_details);
+        Bundle extras = getIntent().getExtras();
+       Index = extras.getInt("key");
+        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
+        projectViewModel.getProjectModels().observe(this, new Observer<List<Project>>() {
+            @Override
+            public void onChanged(List<Project> projects) {
+                modelArrayList =(ArrayList<Project>) projects;
+                queryProject();
+                queryAllTasks();
+
+            }
+        });
+
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         fabAddTask = findViewById(R.id.fab_add_task);
         tvProjectName = findViewById(R.id.tv_project_name_detail);
         edtEndDate = findViewById(R.id.edt_end_date);
@@ -144,7 +164,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        addTask(edtAddTaskName.getText().toString());
+                        //addTask(edtAddTaskName.getText().toString());
                         dialogAddProject.dismiss();
                     }
                 });
@@ -163,11 +183,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         /**
          * retriving intents extras
          */
-        Bundle extras = getIntent().getExtras();
-        mId = extras.getInt("mId");
-        queryProject();
-        queryAllTasks();
-
 
         /**
          * onclick for updating desc
@@ -308,7 +323,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
 
-                final int mId = taskArrayList.get(position).getmTaskId();
+
                 // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProjectDetails.this);
                 LayoutInflater inflater = (LayoutInflater) ProjectDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -332,7 +347,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     public void onClick(View v) {
                         // Delete Operation
                         queryAllTasks();
-                        dbModifier.deleteTask(mId);
+                        //dbModifier.deleteTask(mId);
                         Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
                         queryAllTasks();
                         dialogDeleteTask.dismiss();
@@ -342,6 +357,9 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 return true;
             }
         });
+
+
+
     }
 
 
@@ -349,7 +367,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
      * method to query project detail
      */
     public void queryProject() {
-        String[] projection = {
+        /*String[] projection = {
                 COLUMN_PROJECT_NAME, COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_DESCRIPTION, COLUMN_PROJECT_PROGRESS
         };
         String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
@@ -370,19 +388,19 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         mProjectStartDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE));
         mProjectEndDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE));
         mProjectDescription = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
-        int mProjectProgress = Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS)));
+        int mProjectProgress = Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROJECT_PROGRESS)));*/
         tvProjectDescription.setText(mProjectDescription);
-        tvProjectName.setText(mProjectName);
-        edtStartDate.setText(mProjectStartDate);
-        edtEndDate.setText(mProjectEndDate);
-        projectProgress.setProgress((float) mProjectProgress);
-        tvProjectProgress.setText(mProjectProgress + "%");
+        tvProjectName.setText(modelArrayList.get(Index).getProjectName());
+        edtStartDate.setText(modelArrayList.get(Index).getProjectStartDate());
+        edtEndDate.setText(modelArrayList.get(Index).getProjectEndDate());
+        projectProgress.setProgress((float) modelArrayList.get(Index).getProjectProgress());
+        tvProjectProgress.setText(modelArrayList.get(Index).getProjectProgress() + "%");
 
 
-        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mProjectEndDate));
-        tvProjectTarget.setText("Target : " + calcHelper.getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
+        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(modelArrayList.get(Index).getProjectEndDate()));
+        tvProjectTarget.setText("Target : " + calcHelper.getTarget(modelArrayList.get(Index).getProjectStartDate(), modelArrayList.get(Index).getProjectEndDate()) + "% /day");
 
-        cursor.close();
+        //cursor.close();
     }
 
 
@@ -411,13 +429,13 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     /**
      * add new task
      */
-    public void addTask(String projectName) {
+  /*  public void addTask(String projectName) {
         int mStartYear = calender.get(Calendar.YEAR);
         int mStartMonth = calender.get(Calendar.MONTH) + 1;
         int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
 
         String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
-        ContentValues cv = new ContentValues();
+        *//*ContentValues cv = new ContentValues();
         cv.put(COLUMN_TASK_NAME, projectName);
         cv.put(COLUMN_TASK_END_DATE, mStartDate);
         cv.put(COLUMN_TASK_PROJECT_ID, mId);
@@ -427,15 +445,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         } else {
             Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }
-        queryAllTasks();
-
-    }
+        *//*
+        Task task = new Task(modelArrayList.get(Index).getId(), projectName, 0);
+      taskViewModel.insert(task);
+    }*/
 
     /**
      * Query all project
      */
     public void queryAllTasks() {
-        String[] projection = {
+        /*String[] projection = {
                 COLUMN_TASK_NAME, TASK_ID, COLUMN_TASK_PROJECT_ID, COLUMN_TASK_PROGRESS
         };
         String selection = COLUMN_TASK_PROJECT_ID + " LIKE ?";
@@ -505,9 +524,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
             }
         }
-
-        mTaskAdapter.notifyDataSetChanged();
-        cursor.close();
+*/
+        //mTaskAdapter.notifyDataSetChanged();
 
     }
 
@@ -550,17 +568,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 String desc = edtUpdatetDesc.getText().toString();
-
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_DESCRIPTION, desc);
-                // Which row to update, based on the title
-                String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
-                String[] selectionArgs = {String.valueOf(mId)};
-                int count = writableProjectDb.update(
-                        TABLE_NAME,
-                        values,
-                        selection,
-                        selectionArgs);
                 queryProject();
                 dialogAddProject.dismiss();
 
@@ -573,10 +580,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("list item", "list item clicked");
-        int mId = taskArrayList.get(position).getmTaskId();
-        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(ProjectDetails.this, TaskDetails.class);
-        myIntent.putExtra("mId", mId); //Optional parameters
+        myIntent.putExtra("key", modelArrayList.get(Index).getId()); //Optional parameters
         ProjectDetails.this.startActivity(myIntent);
     }
 
