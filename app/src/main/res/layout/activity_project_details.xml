@@ -57,7 +57,7 @@
             app:iconTintActive="@color/colorWhite"
             app:indicatorColor="@color/colorSecondary"
             app:itemFontFamily="@font/poppins_medium"
-            app:menu="@menu/filter_menu"
+            app:menu="@menu/filter_menu1"
             app:textColor="@color/colorWhite"
 
             />
