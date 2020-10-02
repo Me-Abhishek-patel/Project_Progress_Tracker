@@ -18,6 +18,9 @@ import com.example.projectprogresstracker.TypeConverter.Converter;
 @TypeConverters(Converter.class)
 public abstract class ProjectDataBase extends RoomDatabase {
     private static ProjectDataBase instance;
+    public abstract ProjectDao projectDao();
+    public abstract TaskDao taskDao();
+
     private RoomDatabase.Callback callback = new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -37,7 +40,7 @@ public abstract class ProjectDataBase extends RoomDatabase {
         return instance;
     }
 
-    public abstract ProjectDao projectDao();
+
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private ProjectDao projectDao;

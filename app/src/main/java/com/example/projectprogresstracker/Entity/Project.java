@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class Project {
 
     @ColumnInfo(name = "ID")
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     int Id;
     @ColumnInfo(name = "Project_Name")
     private String ProjectName;
@@ -19,7 +19,8 @@ public class Project {
     @ColumnInfo(name = "Project_Progress")
     private int ProjectProgress;
 
-    public Project(String ProjectName, String ProjectStartDate, String ProjectEndDate, int ProjectProgress) {
+    public Project(int Id, String ProjectName, String ProjectStartDate, String ProjectEndDate, int ProjectProgress) {
+        this.Id = Id;
         this.ProjectName = ProjectName;
         this.ProjectStartDate = ProjectStartDate;
         this.ProjectEndDate = ProjectEndDate;

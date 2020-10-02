@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.projectprogresstracker.Entity.Project;
+import com.example.projectprogresstracker.Entity.Task;
 
 import java.util.List;
 
@@ -21,10 +22,12 @@ public class ProjectViewModel extends AndroidViewModel {
     public void insert(Project project){
         projectRepository.insert(project);
     }
+    public void insert(Task task){projectRepository.insert(task);}
     public void update(Project project){
         projectRepository.update(project);
     }
     public LiveData<List<Project>> getProjectModels() {
         return projectModels;
     }
+    public LiveData<List<Task>> getTasks(int id){return projectRepository.getAllTasks(id);}
 }

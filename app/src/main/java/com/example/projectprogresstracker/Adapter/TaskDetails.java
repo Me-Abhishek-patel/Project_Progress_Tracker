@@ -24,7 +24,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.projectprogresstracker.Architecture.ProjectViewModel;
-import com.example.projectprogresstracker.Architecture.TaskViewModel;
 import com.example.projectprogresstracker.CalcHelper;
 import com.example.projectprogresstracker.Entity.Project;
 import com.example.projectprogresstracker.Entity.Task;
@@ -70,7 +69,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     ArrayList<Task> activityArrayList;
     ProjectViewModel projectViewModel;
     int Index;
-    private TaskViewModel taskViewModel;
+
 
     @Override
     protected void onPostResume() {
@@ -84,15 +83,8 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
         projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
-        projectViewModel.getProjectModels().observe(this, new Observer<List<Project>>() {
-            @Override
-            public void onChanged(List<Project> projects) {
-               TaskDetails.this.projects = (ArrayList<Project>) projects;
-        //        activityArrayList = (ArrayList<Task>) projects.get(Index).getTasks();
-            }
-        });
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        taskViewModel.getTaskLiveData(Index).observe(this, new Observer<List<Task>>() {
+
+        projectViewModel.getTasks(Index).observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 activityArrayList = (ArrayList<Task>) tasks;
@@ -147,7 +139,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        taskViewModel.insert(new Task(Index, edtAddTaskName.getText().toString(), 35));
+                        //taskViewModel.insert(new Task(Index, edtAddTaskName.getText().toString(), 35));
                         addActivity(edtAddTaskName.getText().toString());
                         dialogAddProject.dismiss();
                     }
