@@ -28,7 +28,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.projectprogresstracker.Architecture.ProjectRepository;
 import com.example.projectprogresstracker.Architecture.ProjectViewModel;
-import com.example.projectprogresstracker.Architecture.TaskViewModel;
+
 import com.example.projectprogresstracker.CalcHelper;
 import com.example.projectprogresstracker.Entity.Project;
 import com.example.projectprogresstracker.Entity.Task;
@@ -82,7 +82,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     private final int FILTER_PENDING_PROJECTS = 3;
     private int getFilter = FILTER_ALL_PROJECTS;
     int Index;
-    private TaskViewModel taskViewModel;
 
     @Override
     protected void onPostResume() {
@@ -107,8 +106,14 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
             }
         });
-
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+         projectViewModel.getTasks(Index).observe(this, new Observer<List<Task>>() {
+             @Override
+             public void onChanged(List<Task> tasks) {
+                 taskArrayList =(ArrayList<Task>) tasks;
+                 mTaskAdapter = new TaskAdapter(ProjectDetails.this, taskArrayList);
+                 taskListView.setAdapter(mTaskAdapter);
+             }
+         });
         fabAddTask = findViewById(R.id.fab_add_task);
         tvProjectName = findViewById(R.id.tv_project_name_detail);
         edtEndDate = findViewById(R.id.edt_end_date);
@@ -163,8 +168,9 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 btnCreate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        //addTask(edtAddTaskName.getText().toString());
+                        Toast.makeText(getApplicationContext(), "Foreign Key is "+ Index, Toast.LENGTH_SHORT).show();
+                        Log.i("Foreign key ",  Index+"");
+                        addTask(edtAddTaskName.getText().toString());
                         dialogAddProject.dismiss();
                     }
                 });
@@ -241,7 +247,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        /**
+        /*
          * end date update
          */
         edtEndDate.setOnClickListener(new View.OnClickListener() {
@@ -429,26 +435,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     /**
      * add new task
      */
-  /*  public void addTask(String projectName) {
+    public void addTask(String projectName) {
         int mStartYear = calender.get(Calendar.YEAR);
         int mStartMonth = calender.get(Calendar.MONTH) + 1;
         int mStartDay = calender.get(Calendar.DAY_OF_MONTH);
 
         String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
-        *//*ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TASK_NAME, projectName);
-        cv.put(COLUMN_TASK_END_DATE, mStartDate);
-        cv.put(COLUMN_TASK_PROJECT_ID, mId);
-        Log.i("mStartDate: ", mStartDate);
-        if (writableProjectDb.insert(TASK_TABLE_NAME, null, cv) == -1) {
-            Toast.makeText(getApplicationContext(), "Project can not be added", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
-        }
-        *//*
-        Task task = new Task(modelArrayList.get(Index).getId(), projectName, 0);
-      taskViewModel.insert(task);
-    }*/
+
+        Task task = new Task(Index, projectName, 0);
+         projectViewModel.insert(task);
+    }
 
     /**
      * Query all project
@@ -581,7 +577,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("list item", "list item clicked");
         Intent myIntent = new Intent(ProjectDetails.this, TaskDetails.class);
-        myIntent.putExtra("key", modelArrayList.get(Index).getId()); //Optional parameters
+        myIntent.putExtra("key", Index); //Optional parameters
         ProjectDetails.this.startActivity(myIntent);
     }
 

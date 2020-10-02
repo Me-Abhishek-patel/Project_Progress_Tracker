@@ -11,7 +11,7 @@ import static androidx.room.ForeignKey.CASCADE;
 public class Task {
 
 
-    @ColumnInfo(name = "Project_Id")
+    @ColumnInfo(name = "Project_Id", index = true)
     private int projectId;
 
     @ColumnInfo(name = "Task_Id")

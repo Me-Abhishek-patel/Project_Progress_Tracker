@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private int getFilter = FILTER_ALL_PROJECTS;
     Calendar calender;
     ProjectViewModel projectViewModel;
+    private int id = -1;
 
     @Override
     protected void onPostResume() {
@@ -321,7 +322,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         String mStartDate = mStartYear + "-" + mStartMonth + "-" + mStartDay;
 
-        projectViewModel.insert(new Project(projectName, mStartDate, mStartDate, 0));
+        projectViewModel.insert(new Project(++id ,projectName, mStartDate, mStartDate, 0));
+        Log.i( "Foreign key" , "" + id);
         //projectArrayList = (ArrayList<ProjectModel>) projectRepository.getAllProjects();
         //projectArrayList.add(new ProjectModel(projectName, mStartDate, mStartDate, 0));
 
@@ -446,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Toast.makeText(getApplicationContext(), "" +, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
         myIntent.putExtra("key", position); //Optional parameters
+           Toast.makeText(this, "Project with Id " + projectArrayList.get(position).getId() + " Clicked", Toast.LENGTH_SHORT).show();
         MainActivity.this.startActivity(myIntent);
     }
 }
