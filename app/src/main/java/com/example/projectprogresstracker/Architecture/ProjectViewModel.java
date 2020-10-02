@@ -17,7 +17,7 @@ public class ProjectViewModel extends AndroidViewModel {
     public ProjectViewModel(@NonNull Application application) {
         super(application);
         projectRepository = new ProjectRepository(application);
-        projectModels = projectRepository.getAllProjects();
+
     }
     public void insert(Project project){
         projectRepository.insert(project);
@@ -26,8 +26,17 @@ public class ProjectViewModel extends AndroidViewModel {
     public void update(Project project){
         projectRepository.update(project);
     }
+    public void delete(Task task){
+        projectRepository.delete(task);
+    }
+    public void deleteAllProjects(){
+        projectRepository.deleteAllProjects();
+    }
+public void delete(Project project){
+        projectRepository.delete(project);
+}
     public LiveData<List<Project>> getProjectModels() {
-        return projectModels;
+        return projectRepository.getAllProjects();
     }
     public LiveData<List<Task>> getTasks(int id){return projectRepository.getAllTasks(id);}
 }

@@ -12,32 +12,60 @@ import com.example.projectprogresstracker.data.ProjectDataBase;
 import com.example.projectprogresstracker.data.TaskDao;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ProjectRepository {
     private ProjectDao projectDao;
     private TaskDao taskDao;
     private LiveData<List<Project>> allProjects;
+    private LiveData<List<Task>> Tasks;
+    public LiveData<List<Task>> getAllTasks(final int id) {
 
-    public LiveData<List<Task>> getAllTasks(int id) {
         return taskDao.getTasksForProject(id);
     }
 
     public ProjectRepository(Application application){
         ProjectDataBase projectDataBase = ProjectDataBase.getInstance(application);
         projectDao = projectDataBase.projectDao();
-        allProjects = projectDao.getAllProjects();
         taskDao = projectDataBase.taskDao();
     }
 
     public LiveData<List<Project>> getAllProjects() {
-        return allProjects;
+        return projectDao.getAllProjects();
     }
 
     public void insert(Project project) {
         new AddNewProjectAsyncTask(projectDao).execute(project);
     }
 
-    public void insert(Task task){ taskDao.insert(task);}
+    public void insert(final Task task){
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                taskDao.insert(task);
+            }
+        });
+        }
+    public void delete(final Task task){
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                taskDao.delete(task);
+            }
+        });
+    }
+    public void update(final Task task){
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                taskDao.update(task);
+            }
+        });
+    }
 
 
     public void update(Project project) {
@@ -56,7 +84,24 @@ public class ProjectRepository {
         }
 
     }
-
+    public void deleteAllProjects(){
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                projectDao.deleteAllProjects();
+            }
+        });
+    }
+    public void delete(final Project project){
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                projectDao.delete(project);
+            }
+        });
+    }
     private static class updateAsyncTask extends AsyncTask<Project, Void, Void> {
         private ProjectDao projectDao;
 

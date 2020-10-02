@@ -25,7 +25,7 @@ public abstract class ProjectDataBase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
+
         }
     };
 
@@ -34,7 +34,6 @@ public abstract class ProjectDataBase extends RoomDatabase {
         if(instance == null){
             instance = Room.databaseBuilder(context, ProjectDataBase.class, "Project_DataBase")
             .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
             .build();
         }
         return instance;
@@ -42,15 +41,5 @@ public abstract class ProjectDataBase extends RoomDatabase {
 
 
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ProjectDao projectDao;
-        private PopulateDbAsyncTask(ProjectDataBase db) {
-            projectDao = db.projectDao();
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
 
-            return null;
-        }
-    }
 }

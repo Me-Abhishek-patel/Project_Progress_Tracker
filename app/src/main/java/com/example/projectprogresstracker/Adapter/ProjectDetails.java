@@ -331,6 +331,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
 
                 // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
+                final int pos = position;
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProjectDetails.this);
                 LayoutInflater inflater = (LayoutInflater) ProjectDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View viewDelete = inflater.inflate(R.layout.delete_task_dialog, null);
@@ -353,7 +354,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     public void onClick(View v) {
                         // Delete Operation
                         queryAllTasks();
-                        //dbModifier.deleteTask(mId);
+                        deleteTask(pos);
                         Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
                         queryAllTasks();
                         dialogDeleteTask.dismiss();
@@ -366,6 +367,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
 
 
+    }
+
+    private void deleteTask(int pos) {
+        projectViewModel.delete(taskArrayList.get(pos));
     }
 
 

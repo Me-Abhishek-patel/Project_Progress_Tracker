@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         /**
          * initialisation of variables
          */
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
 
-                final int mId = projectArrayList.get(position).getId();
+                final int mId = position;
                 // Creating the AlertDialog with a custom xml layout (you can still use the default Android version)
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -437,6 +436,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
       //  int deletedRows = writableProjectDb.delete(TABLE_NAME, selection, selectionArgs);
 
     //    queryAllProject();
+        projectViewModel.delete(projectArrayList.get(id));
+
     }
 
 
