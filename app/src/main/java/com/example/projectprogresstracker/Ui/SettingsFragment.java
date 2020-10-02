@@ -1,8 +1,10 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.Ui;
 
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.example.projectprogresstracker.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 

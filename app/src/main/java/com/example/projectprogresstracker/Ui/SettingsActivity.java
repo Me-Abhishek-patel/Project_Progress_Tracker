@@ -1,9 +1,11 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.Ui;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.projectprogresstracker.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

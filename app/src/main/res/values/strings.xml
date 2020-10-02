@@ -8,6 +8,7 @@
     <string name="done">Done</string>
     <string name="pending">Pending</string>
     <string name="all_projects">All Projects</string>
+    <string name="all_tasks">All Tasks</string>
     <string name="completed">Completed</string>
     <string name="all">All</string>
     <string name="dialog_message">Enter Project Name Here</string>

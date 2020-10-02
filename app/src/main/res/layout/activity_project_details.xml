@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProjectDetails">
+    tools:context=".Adapter.ProjectDetails">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
             app:iconTintActive="@color/colorWhite"
             app:indicatorColor="@color/colorSecondary"
             app:itemFontFamily="@font/poppins_medium"
-            app:menu="@menu/filter_menu"
+            app:menu="@menu/filter_menu1"
             app:textColor="@color/colorWhite"
 
             />

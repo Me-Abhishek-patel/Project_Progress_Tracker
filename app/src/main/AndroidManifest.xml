@@ -10,12 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Ui.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".Activity_details" />
-        <activity android:name=".TaskDetails" />
-        <activity android:name=".ProjectDetails" />
+        <activity android:name=".Adapter.Activity_details" />
+        <activity android:name=".Adapter.TaskDetails" />
+        <activity android:name=".Adapter.ProjectDetails" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

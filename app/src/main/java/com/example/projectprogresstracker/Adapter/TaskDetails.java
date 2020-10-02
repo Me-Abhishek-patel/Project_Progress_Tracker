@@ -1,10 +1,9 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.Adapter;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,7 +20,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.projectprogresstracker.Architecture.ProjectViewModel;
+import com.example.projectprogresstracker.Architecture.TaskViewModel;
+import com.example.projectprogresstracker.CalcHelper;
+import com.example.projectprogresstracker.Entity.Project;
+import com.example.projectprogresstracker.Entity.Task;
+import com.example.projectprogresstracker.R;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.progressview.ProgressView;
@@ -30,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_TABLE_NAME;
@@ -51,7 +59,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     ProjectDbHelper projectDbHelper;
     SeekBar seekBar;
     ListView taskListView;
-    ArrayList<TaskModel> activityArrayList;
+    public ArrayList<Project> projects;
     TaskAdapter mTaskAdapter;
     TextView tvTaskProgress, tvTaskName, tvTaskEndDate, tvTaskDesc, tvDaysLeft;
     SimpleDateFormat sdf, inputFormat;
@@ -59,6 +67,10 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     Calendar calender;
     FloatingActionButton fabAddActivity;
     ProgressView taskProgressView;
+    ArrayList<Task> activityArrayList;
+    ProjectViewModel projectViewModel;
+    int Index;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onPostResume() {
@@ -71,6 +83,24 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
+        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
+        projectViewModel.getProjectModels().observe(this, new Observer<List<Project>>() {
+            @Override
+            public void onChanged(List<Project> projects) {
+               TaskDetails.this.projects = (ArrayList<Project>) projects;
+        //        activityArrayList = (ArrayList<Task>) projects.get(Index).getTasks();
+            }
+        });
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel.getTaskLiveData(Index).observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                activityArrayList = (ArrayList<Task>) tasks;
+                mTaskAdapter = new TaskAdapter(TaskDetails.this, activityArrayList);
+                taskListView.setAdapter(mTaskAdapter);
+                mTaskAdapter.notifyDataSetChanged();
+            }
+        });
         fabAddActivity = findViewById(R.id.fab_add_activity);
         projectDbHelper = new ProjectDbHelper(this);
         writableTaskDb = projectDbHelper.getWritableDatabase();
@@ -117,8 +147,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        activityArrayList.add(new TaskModel(1, edtAddTaskName.getText().toString(), 35));
-                        mTaskAdapter.notifyDataSetChanged();
+                        taskViewModel.insert(new Task(Index, edtAddTaskName.getText().toString(), 35));
                         addActivity(edtAddTaskName.getText().toString());
                         dialogAddProject.dismiss();
                     }
@@ -211,7 +240,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
          * retriving intents extras
          */
         Bundle extras = getIntent().getExtras();
-        mId = extras.getInt("mId");
+        Index = extras.getInt("key");
         queryAllActivity();
         queryTask();
     }
@@ -385,7 +414,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
             sumProgress += Integer.parseInt(taskProgres);
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(ACTIVITY_ID));
             String taskName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ACTIVITY_NAME));
-            activityArrayList.add(new TaskModel(id, taskName, Integer.parseInt(taskProgres)));
+            //activityArrayList.add(new Task(taskName, Integer.parseInt(taskProgres)));
 
         }
         if (cursor.getCount() != 0)
@@ -407,11 +436,11 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int mId = activityArrayList.get(position).getmTaskId();
+     /*   int mId = activityArrayList.get(position).getmTaskId();
         Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(TaskDetails.this, Activity_details.class);
         myIntent.putExtra("mId", mId); //Optional parameters
-        TaskDetails.this.startActivity(myIntent);
+        TaskDetails.this.startActivity(myIntent);*/
     }
 
 }

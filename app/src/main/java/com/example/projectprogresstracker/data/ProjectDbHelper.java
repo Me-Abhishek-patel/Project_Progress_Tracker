@@ -14,14 +14,6 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_TASK_ID;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_BUDGET;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_DESCRIPTION;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_END_POINT;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_PROGRESS;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_DATE;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_START_POINT;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
@@ -29,7 +21,6 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROJECT_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry._ID;
 
 public class ProjectDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
@@ -38,7 +29,7 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     /**
      * create table statements
      */
-    String SQL_CREATE_PROJECT_TABLE = "CREATE TABLE " + ProjectContract.ProjectEntry.TABLE_NAME + " ( "
+ /*   String SQL_CREATE_PROJECT_TABLE = "CREATE TABLE " + ProjectContract.ProjectEntry.TABLE_NAME + " ( "
             + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_PROJECT_NAME + " TEXT NOT NULL, "
             + COLUMN_START_DATE + " TEXT, "
@@ -47,7 +38,7 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
             + COLUMN_BUDGET + " INTEGER DEFAULT 0, "
             + COLUMN_PROJECT_PROGRESS + " INTEGER DEFAULT 0, "
             + COLUMN_START_POINT + " INTEGER DEFAULT 0, "
-            + COLUMN_END_POINT + " INTEGER DEFAULT 100); ";
+            + COLUMN_END_POINT + " INTEGER DEFAULT 100); ";*/
 
 
     String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + TASK_TABLE_NAME + " ( "
@@ -79,7 +70,7 @@ public class ProjectDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(SQL_CREATE_PROJECT_TABLE);
+      //  db.execSQL(SQL_CREATE_PROJECT_TABLE);
         db.execSQL(SQL_CREATE_TASK_TABLE);
         db.execSQL(SQL_CREATE_ACTIVITY_TABLE);
     }
