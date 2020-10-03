@@ -1,18 +1,22 @@
 package com.example.projectprogresstracker;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -180,7 +184,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                presentAlertDialogForRenamingTask();
                                 return true;
                             default:
                                 return true;
@@ -191,6 +195,31 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                 });
         popup.show();
 
+    }
+
+
+    private void presentAlertDialogForRenamingTask() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText editText = new EditText(this);
+        alert.setMessage("Enter the new name of the task");
+        alert.setTitle("Rename Current Task");
+
+        alert.setView(editText);
+
+        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String text = editText.getText().toString();
+                tvActivityName.setText(text);
+            }
+        });
+
+        alert.setNegativeButton("No Option", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        alert.show();
     }
 }
 

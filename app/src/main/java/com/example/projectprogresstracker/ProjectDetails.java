@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -613,7 +614,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                presentAlertDialogForRenamingTask();
                                 return true;
                             default:
                                 return true;
@@ -624,5 +625,29 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 });
         popup.show();
 
+    }
+
+    private void presentAlertDialogForRenamingTask() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText editText = new EditText(this);
+        alert.setMessage("Enter the new name of the task");
+        alert.setTitle("Rename Current Task");
+
+        alert.setView(editText);
+
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String text = editText.getText().toString();
+                tvProjectName.setText(text);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        alert.show();
     }
 }
