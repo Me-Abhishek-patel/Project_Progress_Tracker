@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -412,6 +414,33 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         Intent myIntent = new Intent(TaskDetails.this, Activity_details.class);
         myIntent.putExtra("mId", mId); //Optional parameters
         TaskDetails.this.startActivity(myIntent);
+    }
+
+    public void loadOptions(View view) {
+
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.getMenuInflater().inflate(
+                R.menu.options_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(
+                new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.option_delete:
+                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.option_rename:
+                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return true;
+
+                        }
+                    }
+                    // implement click listener.
+                });
+        popup.show();
+
     }
 
 }
