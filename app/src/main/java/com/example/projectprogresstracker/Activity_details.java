@@ -24,6 +24,8 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
 public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     int mId;
@@ -165,6 +167,10 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
 
     }
 
+    public void deleteActivity() {
+        writableTaskDb.delete(ACTIVITY_TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
+    }
+
 
     public void loadOptions(View view) {
 
@@ -177,7 +183,9 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Task deleted", Toast.LENGTH_SHORT).show();
+                                deleteActivity();
+                                finish();
                                 return true;
                             case R.id.option_rename:
                                 Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();

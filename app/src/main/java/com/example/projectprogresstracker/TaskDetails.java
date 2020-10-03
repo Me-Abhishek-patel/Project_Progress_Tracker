@@ -416,6 +416,11 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         TaskDetails.this.startActivity(myIntent);
     }
 
+    public void deleteTask() {
+        writableTaskDb.delete(TASK_TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
+    }
+
+
     public void loadOptions(View view) {
 
         PopupMenu popup = new PopupMenu(this, view);
@@ -427,7 +432,9 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Task Deleted", Toast.LENGTH_SHORT).show();
+                                deleteTask();
+                                finish();
                                 return true;
                             case R.id.option_rename:
                                 Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
