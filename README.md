@@ -38,4 +38,4 @@ Fork the repository.
 
 ### Branch Policy
 
-dev All the contributions should be pushed to this branch. If you're making a contribution, you are supposed to make a pull request to dev. Please make sure it passes a build check on Travis.
+dev All the contributions should be pushed to this branch. If you're making a contribution, you are supposed to make a pull request to dev.
