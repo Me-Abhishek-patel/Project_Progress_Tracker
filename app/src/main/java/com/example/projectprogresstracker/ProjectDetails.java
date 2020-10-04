@@ -145,9 +145,13 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 btnCreate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        addTask(edtAddTaskName.getText().toString());
-                        dialogAddProject.dismiss();
+                        if (!edtAddTaskName.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
+                            addTask(edtAddTaskName.getText().toString());
+                            dialogAddProject.dismiss();
+                        } else {
+                            Toast.makeText(ProjectDetails.this, "Task name couldn't be empty", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
