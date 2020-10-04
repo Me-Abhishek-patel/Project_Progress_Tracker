@@ -1,4 +1,4 @@
-# Project_Progress_Tracker
+# Project Progress Tracker
 
 - This is a project's progress management apps.
 - You can enter the progress of the task.
