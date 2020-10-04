@@ -56,7 +56,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener, AlertDialogCallbacks {
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
     TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription, tvProjectProgress;
@@ -600,6 +600,21 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 //
     }
 
+    public void updateProjectName(String projectName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROJECT_NAME, projectName);
+        // Which row to update, based on the title
+        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableProjectDb.update(
+                TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryProject();
+    }
+
     public void loadOptions(View view) {
 
         PopupMenu popup = new PopupMenu(this, view);
@@ -614,7 +629,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName, ProjectDetails.this);
                                 return true;
                             default:
                                 return true;
@@ -624,6 +639,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     // implement click listener.
                 });
         popup.show();
+
+    }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateProjectName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
 
     }
 }

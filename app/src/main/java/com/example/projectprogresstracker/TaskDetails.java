@@ -25,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
+import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.progressview.ProgressView;
@@ -40,14 +41,16 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_TASK_ID;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROGRESS;
+import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class TaskDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class TaskDetails extends AppCompatActivity implements AdapterView.OnItemClickListener, AlertDialogCallbacks {
 
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
@@ -333,6 +336,21 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         queryTask();
     }
 
+    public void updateTaskName(String taskName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TASK_NAME, taskName);
+        // Which row to update, based on the title
+        String selection = TASK_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableTaskDb.update(
+                TASK_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryTask();
+    }
+
     public void addActivity(String activityName) {
         int mStartYear = calender.get(Calendar.YEAR);
         int mStartMonth = calender.get(Calendar.MONTH) + 1;
@@ -431,7 +449,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(TaskDetails.this, "Task", tvTaskName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(TaskDetails.this, "Task", tvTaskName, TaskDetails.this);
                                 return true;
                             default:
                                 return true;
@@ -441,6 +459,16 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                     // implement click listener.
                 });
         popup.show();
+
+    }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateTaskName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
 
     }
 

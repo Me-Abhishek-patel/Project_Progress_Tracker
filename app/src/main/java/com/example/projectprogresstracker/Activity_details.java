@@ -29,7 +29,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
 
-public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AlertDialogCallbacks {
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
     ProjectDbHelper projectDbHelper;
@@ -152,6 +152,22 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         queryActivity();
     }
 
+    public void updateActivityName(String activityName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ACTIVITY_NAME, activityName);
+        // Which row to update, based on the title
+        String selection = ACTIVITY_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableTaskDb.update(
+                ACTIVITY_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryActivity();
+    }
+
+
     /**
      * back botton
      */
@@ -184,7 +200,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(Activity_details.this, "Activity", tvActivityName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(Activity_details.this, "Activity", tvActivityName, Activity_details.this);
                                 return true;
                             default:
                                 return true;
@@ -196,5 +212,16 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         popup.show();
 
     }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateActivityName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
+
+    }
+
 }
 
