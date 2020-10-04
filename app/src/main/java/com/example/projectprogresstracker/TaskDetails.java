@@ -431,7 +431,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(TaskDetails.this, tvTaskName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(TaskDetails.this, "Task", tvTaskName);
                                 return true;
                             default:
                                 return true;

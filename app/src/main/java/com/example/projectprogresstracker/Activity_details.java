@@ -184,7 +184,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(Activity_details.this, tvActivityName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(Activity_details.this, "Activity", tvActivityName);
                                 return true;
                             default:
                                 return true;

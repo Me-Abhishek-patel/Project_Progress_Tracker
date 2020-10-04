@@ -18,11 +18,11 @@ class AlertDialogService {
 
     }
 
-    public void showAlertDialogToRename(Context context, final TextView textViewToUpdate) {
+    public void showAlertDialogToRename(Context context, String type, final TextView textViewToUpdate) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         final EditText editText = new EditText(context);
-        alert.setMessage("Enter the new name of the task");
-        alert.setTitle("Rename Current Task");
+        alert.setMessage("Enter the new name of the " + type);
+        alert.setTitle("Rename Current " + type);
 
         alert.setView(editText);
 

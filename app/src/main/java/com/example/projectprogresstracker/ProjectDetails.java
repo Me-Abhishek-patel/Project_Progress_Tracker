@@ -614,7 +614,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, tvProjectName);
+                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName);
                                 return true;
                             default:
                                 return true;
