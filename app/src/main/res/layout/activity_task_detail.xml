@@ -281,15 +281,15 @@
 
 
                     <ImageView
+                        android:id="@+id/btnSortActivity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:src="@drawable/ic_sort_"
-                        app:tint="@color/colorPrimary"
 
-                        />
+                        app:tint="@color/colorPrimary" />
 
 
                 </RelativeLayout>

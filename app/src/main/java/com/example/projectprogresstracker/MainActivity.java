@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
@@ -34,6 +36,7 @@ import com.skydoves.progressview.ProgressView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     BottomAppBar bottomAppBar;
     ExpandableLayout expandablelayout;
-    ImageView expandCollapseArrow;
+    ImageView expandCollapseArrow, btnSort;
     ListView projectListView;
     ProjectAdapter mProjectAdapter;
     FloatingActionButton fabAddProject;
@@ -72,9 +75,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final int FILTER_PENDING_PROJECTS = 3;
     private int getFilter = FILTER_ALL_PROJECTS;
     Calendar calender;
+    boolean sorted = false;
 
     @Override
     protected void onPostResume() {
+        sorted = false;
         queryAllProject();
         super.onPostResume();
     }
@@ -107,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         pvAllProjects = findViewById(R.id.progressView1);
         pvCompletedProjects = findViewById(R.id.progressView2);
         pvPendingProject = findViewById(R.id.progressView3);
+        btnSort = findViewById(R.id.btnSortProject);
 
 
         projectListView.setAdapter(mProjectAdapter);
@@ -260,6 +266,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
+        /*
+            Button Sort Project Clicked
+         */
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sorted){
+                    sorted = false;
+                    queryAllProject();
+                }else {
+                    sorted = true;
+                    Collections.sort(projectArrayList);
+                    mProjectAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
 
