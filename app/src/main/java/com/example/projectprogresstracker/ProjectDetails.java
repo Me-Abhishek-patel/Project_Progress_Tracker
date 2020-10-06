@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -55,7 +56,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener, AlertDialogCallbacks {
     ExpandableLayout expandablelayout2;
     ImageView expandCollapseArrow2;
     TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription, tvProjectProgress;
@@ -603,8 +604,24 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 //
     }
 
+
+    public void updateProjectName(String projectName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROJECT_NAME, projectName);
+        // Which row to update, based on the title
+        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableProjectDb.update(
+                TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryProject();
+
     public void deleteProject() {
         writableProjectDb.delete(TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
+
     }
 
     public void loadOptions(View view) {
@@ -623,7 +640,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 finish();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName, ProjectDetails.this);
                                 return true;
                             default:
                                 return true;
@@ -633,6 +650,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     // implement click listener.
                 });
         popup.show();
+
+    }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateProjectName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
 
     }
 }
