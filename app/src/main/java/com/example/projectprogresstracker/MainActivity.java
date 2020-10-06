@@ -204,8 +204,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     btnCreate.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            addProject(edtAddProjectName.getText().toString());
-                            dialogAddProject.dismiss();
+                            if(!edtAddProjectName.getText().toString().isEmpty()) {
+                                addProject(edtAddProjectName.getText().toString());
+                                dialogAddProject.dismiss();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Project name couldn't be empty", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
@@ -303,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }
         queryAllProject();
-
     }
 
 

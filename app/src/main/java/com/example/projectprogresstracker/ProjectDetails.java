@@ -146,9 +146,13 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 btnCreate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        addTask(edtAddTaskName.getText().toString());
-                        dialogAddProject.dismiss();
+                        if (!edtAddTaskName.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), edtAddTaskName.getText().toString(), Toast.LENGTH_SHORT).show();
+                            addTask(edtAddTaskName.getText().toString());
+                            dialogAddProject.dismiss();
+                        } else {
+                            Toast.makeText(ProjectDetails.this, "Task name couldn't be empty", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -600,6 +604,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 //
     }
 
+
     public void updateProjectName(String projectName) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PROJECT_NAME, projectName);
@@ -613,6 +618,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 selectionArgs);
 
         queryProject();
+
+    public void deleteProject() {
+        writableProjectDb.delete(TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
+
     }
 
     public void loadOptions(View view) {
@@ -626,7 +635,9 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Project deleted", Toast.LENGTH_SHORT).show();
+                                deleteProject();
+                                finish();
                                 return true;
                             case R.id.option_rename:
                                 AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName, ProjectDetails.this);
