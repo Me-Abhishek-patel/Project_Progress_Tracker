@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.ACTIVITY_TABLE_NAME;
@@ -65,9 +67,12 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     Calendar calender;
     FloatingActionButton fabAddActivity;
     ProgressView taskProgressView;
+    ImageView btnSort;
+    boolean sorted = false;
 
     @Override
     protected void onPostResume() {
+        sorted = false;
         queryAllActivity();
         queryTask();
         super.onPostResume();
@@ -95,6 +100,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         taskListView.setOnItemClickListener(this);
         mTaskAdapter = new TaskAdapter(this, activityArrayList);
         taskListView.setAdapter(mTaskAdapter);
+        btnSort = findViewById(R.id.btnSortActivity);
 
 
 /**
@@ -220,6 +226,23 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         mId = extras.getInt("mId");
         queryAllActivity();
         queryTask();
+
+        /*
+            Button Sort Activity Clicked
+         */
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sorted){
+                    sorted = false;
+                    queryAllActivity();
+                }else {
+                    sorted = true;
+                    Collections.sort(activityArrayList);
+                    mTaskAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
 

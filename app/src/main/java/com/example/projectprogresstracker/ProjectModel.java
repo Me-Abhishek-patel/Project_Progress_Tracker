@@ -1,6 +1,6 @@
 package com.example.projectprogresstracker;
 
-public class ProjectModel {
+public class ProjectModel implements Comparable<ProjectModel>{
     private String mProjectName;
     private String mProjectStartDate;
     private String mProjectEndDate;
@@ -53,5 +53,10 @@ public class ProjectModel {
 
     public void setmProjectProgress(int mProjectProgress) {
         this.mProjectProgress = mProjectProgress;
+    }
+
+    @Override
+    public int compareTo(ProjectModel o) {
+        return mProjectName.compareTo(o.mProjectName);
     }
 }

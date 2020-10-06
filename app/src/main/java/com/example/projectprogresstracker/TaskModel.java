@@ -1,6 +1,6 @@
 package com.example.projectprogresstracker;
 
-public class TaskModel {
+public class TaskModel implements Comparable<TaskModel> {
 
     private String mTaskName;
     private int mTaskProgress;
@@ -34,5 +34,10 @@ public class TaskModel {
 
     public void setmTaskId(int mTaskId) {
         this.mTaskId = mTaskId;
+    }
+
+    @Override
+    public int compareTo(TaskModel o) {
+        return mTaskProgress - o.mTaskProgress;
     }
 }
