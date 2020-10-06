@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -618,6 +617,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 selectionArgs);
 
         queryProject();
+    }
 
     public void deleteProject() {
         writableProjectDb.delete(TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
