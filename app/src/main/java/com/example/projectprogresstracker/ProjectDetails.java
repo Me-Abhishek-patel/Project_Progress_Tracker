@@ -38,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -55,9 +56,9 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ProjectDetails extends AppCompatActivity implements AdapterView.OnItemClickListener, AlertDialogCallbacks {
     ExpandableLayout expandablelayout2;
-    ImageView expandCollapseArrow2;
+    ImageView expandCollapseArrow2, btnSort;
     TextView edtStartDate, edtEndDate, tvProjectName, tvDaysLeft, tvProjectTarget, tvProjectDescription, tvProjectProgress;
     int mStartYear, mStartMonth, mStartDay, mEndYear, mEndMonth, mEndDay;
     SQLiteDatabase writableProjectDb, readableProjectDb;
@@ -79,9 +80,11 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     private final int FILTER_COMPLETED_PROJECTS = 2;
     private final int FILTER_PENDING_PROJECTS = 3;
     private int getFilter = FILTER_ALL_PROJECTS;
+    boolean sorted = false;
 
     @Override
     protected void onPostResume() {
+        sorted = false;
         queryAllTasks();
         queryProject();
         super.onPostResume();
@@ -108,6 +111,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         filterSmoothBottomBar = findViewById(R.id.project_detail_filterAppbar);
         taskListView = findViewById(R.id.task_listView);
         projectProgress = findViewById(R.id.pv_project_progress_detail);
+        btnSort = findViewById(R.id.btnSortTask);
+
         taskArrayList = new ArrayList<>();
         mTaskAdapter = new TaskAdapter(this, taskArrayList);
         calender = Calendar.getInstance();
@@ -346,6 +351,23 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     }
                 });
                 return true;
+            }
+        });
+
+        /*
+            Button Sort Task Clicked
+         */
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sorted){
+                    sorted = false;
+                    queryAllTasks();
+                }else {
+                    sorted = true;
+                    Collections.sort(taskArrayList);
+                    mTaskAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -603,8 +625,25 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 //
     }
 
+
+    public void updateProjectName(String projectName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROJECT_NAME, projectName);
+        // Which row to update, based on the title
+        String selection = ProjectContract.ProjectEntry._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableProjectDb.update(
+                TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryProject();
+    }
+
     public void deleteProject() {
         writableProjectDb.delete(TABLE_NAME, "_id = ?", new String[] { Integer.toString(mId) });
+
     }
 
     public void loadOptions(View view) {
@@ -623,7 +662,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 finish();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName, ProjectDetails.this);
                                 return true;
                             default:
                                 return true;
@@ -633,6 +672,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     // implement click listener.
                 });
         popup.show();
+
+    }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateProjectName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
 
     }
 }

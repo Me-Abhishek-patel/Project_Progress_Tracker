@@ -1,18 +1,22 @@
 package com.example.projectprogresstracker;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -27,7 +31,7 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AlertDialogCallbacks {
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
     ProjectDbHelper projectDbHelper;
@@ -150,6 +154,22 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         queryActivity();
     }
 
+    public void updateActivityName(String activityName) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ACTIVITY_NAME, activityName);
+        // Which row to update, based on the title
+        String selection = ACTIVITY_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(mId)};
+        int count = writableTaskDb.update(
+                ACTIVITY_TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        queryActivity();
+    }
+
+
     /**
      * back botton
      */
@@ -188,7 +208,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                                 finish();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                AlertDialogService.getInstance().showAlertDialogToRename(Activity_details.this, "Activity", tvActivityName, Activity_details.this);
                                 return true;
                             default:
                                 return true;
@@ -200,5 +220,16 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         popup.show();
 
     }
+
+    @Override
+    public void onPositiveAlertDialogOption(String changedName) {
+        updateActivityName(changedName);
+    }
+
+    @Override
+    public void onNegativeAlertDialogOption() {
+
+    }
+
 }
 
