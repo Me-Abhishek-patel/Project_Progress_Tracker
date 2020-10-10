@@ -40,6 +40,29 @@ public class CalcHelper {
     }
 
     /**
+     * method to calculate daysleftBetnFromAndToDate
+     */
+    public String getDaysLeftFromAndTo(String dateFrom,String dateTill) {
+        SimpleDateFormat inputFormat;
+        inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateFr = null;
+        try {
+            dateFr = inputFormat.parse(dateFrom);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date dateTo = null;
+        try {
+            dateTo = inputFormat.parse(dateTill);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int diffInDays = (int) ((dateTo.getTime() - dateFr.getTime()) / (1000 * 60 * 60 * 24));
+
+        return String.valueOf(diffInDays);
+    }
+
+    /**
      * method to calculate target
      */
     public String getTarget(String startDate, String endDate) {
