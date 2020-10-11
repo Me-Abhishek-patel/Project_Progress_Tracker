@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -197,11 +198,23 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         edtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                mStartYear = c.get(Calendar.YEAR);
-                mStartMonth = c.get(Calendar.MONTH);
-                mStartDay = c.get(Calendar.DAY_OF_MONTH);
+
+                String[] startEndDates = queryProject();
+                int segregatedDate[] = splitDate(startEndDates,"startDate");
+                mStartYear = segregatedDate[0];
+                mStartMonth = segregatedDate[1];
+                mStartDay = segregatedDate[2];
+
+                String endDate = startEndDates[1];
+
+                long maxDate = 0;
+
+                try {
+                    Date date = inputFormat.parse(endDate);
+                    maxDate = date.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ProjectDetails.this,
@@ -231,8 +244,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
 
                             }
-                        }, mStartYear, mStartMonth, mStartDay);
-
+                        }, mStartYear, mStartMonth-1, mStartDay);
+                datePickerDialog.getDatePicker().setMaxDate(maxDate);
                 datePickerDialog.show();
             }
         });
@@ -243,12 +256,23 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         edtEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                mEndYear = c.get(Calendar.YEAR);
-                mEndMonth = c.get(Calendar.MONTH);
-                mEndDay = c.get(Calendar.DAY_OF_MONTH);
 
+                String[] startEndDates = queryProject();
+                int segregatedDate[] = splitDate(startEndDates,"endDate");
+                mEndYear = segregatedDate[0];
+                mEndMonth = segregatedDate[1];
+                mEndDay = segregatedDate[2];
+
+                String startDate = startEndDates[0];
+
+                long minDate = 0;
+
+                try {
+                    Date date = inputFormat.parse(startDate);
+                    minDate = date.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ProjectDetails.this,
                         new DatePickerDialog.OnDateSetListener() {
@@ -277,7 +301,8 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
 
                             }
-                        }, mEndYear, mEndMonth, mEndDay);
+                        }, mEndYear, mEndMonth-1, mEndDay);
+                datePickerDialog.getDatePicker().setMinDate(minDate);
                 datePickerDialog.show();
             }
         });
@@ -372,11 +397,45 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
+    /**
+     * method to split year,month and date from date string
+     */
+    public int[] splitDate(String[] date,String dateFromOrTo){
+        String startDate = date[0];
+        String endDate = date[1];
+        String[] dateSeparator;
+        String yearsInDB = "";
+        String monthsInDB = "";
+        String daysInDB = "";
+
+        switch(dateFromOrTo){
+            case "startDate":
+                dateSeparator = startDate.split("-");
+                yearsInDB = dateSeparator[0];
+                monthsInDB = dateSeparator[1];
+                daysInDB = dateSeparator[2];
+                break;
+            case "endDate":
+                dateSeparator = endDate.split("-");
+                yearsInDB = dateSeparator[0];
+                monthsInDB = dateSeparator[1];
+                daysInDB = dateSeparator[2];
+                break;
+        }
+
+        int[] splittedDates = new int[3];
+        splittedDates[0] = Integer.parseInt(yearsInDB);
+        splittedDates[1] = Integer.parseInt(monthsInDB);
+        splittedDates[2] = Integer.parseInt(daysInDB);
+
+        return splittedDates;
+
+    }
 
     /**
-     * method to query project detail
+     * method to query project detail and return start and end dates
      */
-    public void queryProject() {
+    public String[] queryProject() {
         String[] projection = {
                 COLUMN_PROJECT_NAME, COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_DESCRIPTION, COLUMN_PROJECT_PROGRESS
         };
@@ -405,12 +464,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         edtEndDate.setText(mProjectEndDate);
         projectProgress.setProgress((float) mProjectProgress);
         tvProjectProgress.setText(mProjectProgress + "%");
-
-
-        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mProjectEndDate));
+        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeftFromAndTo(mProjectStartDate,mProjectEndDate));
         tvProjectTarget.setText("Target : " + calcHelper.getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
 
         cursor.close();
+
+        String[] startAndEndDates = new String[2];
+        startAndEndDates[0] = mProjectStartDate;
+        startAndEndDates[1] = mProjectEndDate;
+        return startAndEndDates;
+
     }
 
 
