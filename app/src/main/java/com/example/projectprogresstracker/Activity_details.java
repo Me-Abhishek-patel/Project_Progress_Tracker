@@ -33,7 +33,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
     TextView tvActivityName, tvActivityProgress;
     Spinner options;
 
-    String[] country = {"Rename", "Delete"};
+    String[] country = getResources().getStringArray(R.array.country);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
