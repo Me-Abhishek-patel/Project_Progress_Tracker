@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cv.put(COLUMN_END_DATE, mStartDate);
         Log.i("mStartDate: ", mStartDate);
         if (writableProjectDb.insert(TABLE_NAME, null, cv) == -1) {
-            Toast.makeText(getApplicationContext(), "Project can not be added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.project_cannot_be_added), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
         }

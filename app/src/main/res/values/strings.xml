@@ -34,5 +34,6 @@
     <string name="task">Task</string>
     <string name="deleted_project">Deleted project</string>
     <string name="collapse">collapse</string>
+    <string name="project_cannot_be_added">Project can not be added</string>
 
 </resources>
