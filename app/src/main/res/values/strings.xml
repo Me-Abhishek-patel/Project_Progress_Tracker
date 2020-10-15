@@ -35,5 +35,8 @@
     <string name="deleted_project">Deleted project</string>
     <string name="collapse">collapse</string>
     <string name="project_cannot_be_added">Project can not be added</string>
+    <string name="added">Added</string>
+    <string name="no_pending_project_found">No pending project found</string>
+    <string name="no_completed_project_found">No completed project found</string>
 
 </resources>

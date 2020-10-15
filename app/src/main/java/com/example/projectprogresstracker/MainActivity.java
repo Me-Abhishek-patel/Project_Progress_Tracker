@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (writableProjectDb.insert(TABLE_NAME, null, cv) == -1) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.project_cannot_be_added), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), projectName + " " + getResources().getString(R.string.added), Toast.LENGTH_SHORT).show();
         }
         queryAllProject();
 
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 }
                 if (projectArrayList.size() == 0)
-                    Toast.makeText(getApplicationContext(), "No pending project found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_pending_project_found), Toast.LENGTH_SHORT).show();
             }
         } else if (getFilter == FILTER_COMPLETED_PROJECTS) {
             while (cursor.moveToNext()) {
@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
             if (projectArrayList.size() == 0)
-                Toast.makeText(getApplicationContext(), "No completed project found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_completed_project_found), Toast.LENGTH_SHORT).show();
 
         } else {
             while (cursor.moveToNext()) {
@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int mId = projectArrayList.get(position).getmId();
         Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
-        myIntent.putExtra("mId", mId); //Optional parameters
+        myIntent.putExtra(getResources().getString(R.string.mId), mId); //Optional parameters
         MainActivity.this.startActivity(myIntent);
     }
 
