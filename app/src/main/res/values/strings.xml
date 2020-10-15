@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">Project Progress Tracker</string>
-
     <string name="dashboard">Dashboard</string>
     <string name="settings">Settings</string>
-    <string name="single_task">Tasks</string>
-    <string name="projects">Projects</string>
     <string name="done">Done</string>
     <string name="pending">Pending</string>
-    <string name="all_projects">All Projects</string>
     <string name="completed">Completed</string>
     <string name="all">All</string>
     <string name="dialog_message">Enter Project Name Here</string>
+    <string name="clicked">Clicked</string>
+    <string name="collapse">collapse</string>
+    <string name="added">Added</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -25,25 +25,33 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Task -->
+    <string name="task">Task</string>
+    <string name="no_pending_task_found">No pending task found</string>
+    <string name="no_completed_task_found">No completed task found</string>
+    <string name="single_task">Tasks</string>
+
+    <!-- Project -->
+    <string name="deleted_project">Deleted project</string>
+    <string name="project_cannot_be_added">Project can not be added</string>
+    <string name="no_pending_project_found">No pending project found</string>
+    <string name="no_completed_project_found">No completed project found</string>
+    <string name="all_projects">All Projects</string>
+    <string name="projects">Projects</string>
+
+    <!-- Activity -->
+    <string name="activity_can_not_be_added">activity can not be added</string>
+
     <string-array name="country">
         <item>Rename</item>
         <item>Delete</item>
     </string-array>
     <string name="mId">mId</string>
-    <string name="clicked">Clicked</string>
-    <string name="task">Task</string>
-    <string name="deleted_project">Deleted project</string>
-    <string name="collapse">collapse</string>
-    <string name="project_cannot_be_added">Project can not be added</string>
-    <string name="added">Added</string>
-    <string name="no_pending_project_found">No pending project found</string>
-    <string name="no_completed_project_found">No completed project found</string>
     <string name="days_left">Days left</string>
-    <string name="no_pending_task_found">No pending task found</string>
-    <string name="no_completed_task_found">No completed task found</string>
     <string name="list_item">list item</string>
     <string name="cursor_length">cursor length</string>
-    <string name="activity_can_not_be_added">activity can not be added</string>
+
 
 
 </resources>
