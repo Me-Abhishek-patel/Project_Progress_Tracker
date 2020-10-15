@@ -29,5 +29,6 @@
         <item>Rename</item>
         <item>Delete</item>
     </string-array>
+    <string name="mId">mId</string>
 
 </resources>

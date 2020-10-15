@@ -56,7 +56,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
          * retriving intents extras
          */
         Bundle extras = getIntent().getExtras();
-        mId = extras.getInt("mId");
+        mId = extras.getInt(getResources().getString(R.string.mId));
         queryActivity();
     }
 
