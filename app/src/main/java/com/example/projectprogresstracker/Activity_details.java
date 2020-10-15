@@ -177,10 +177,10 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[1] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[0] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return true;
