@@ -42,6 +42,8 @@
     <string name="no_pending_task_found">No pending task found</string>
     <string name="no_completed_task_found">No completed task found</string>
     <string name="list_item">list item</string>
+    <string name="cursor_length">cursor length</string>
+    <string name="activity_can_not_be_added">activity can not be added</string>
 
 
 </resources>

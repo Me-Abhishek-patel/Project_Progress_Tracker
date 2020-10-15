@@ -213,7 +213,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
          * retriving intents extras
          */
         Bundle extras = getIntent().getExtras();
-        mId = extras.getInt("mId");
+        mId = extras.getInt(getResources().getString(R.string.mId));
         queryAllActivity();
         queryTask();
     }
@@ -241,7 +241,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         );
 
         if (cursor.getCount() > 0)
-            Toast.makeText(getApplicationContext(), "cursor length " + cursor.getCount(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.cursor_length) + " " + cursor.getCount(), Toast.LENGTH_SHORT).show();
 
         if (cursor != null && cursor.moveToFirst()) {
 
@@ -344,9 +344,9 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         cv.put(COLUMN_ACTIVITY_TASK_ID, mId);
 
         if (writableTaskDb.insert(ACTIVITY_TABLE_NAME, null, cv) == -1) {
-            Toast.makeText(getApplicationContext(), "activity can not be added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.activity_can_not_be_added), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), activityName + " Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), activityName + " " + getResources().getString(R.string.added), Toast.LENGTH_SHORT).show();
         }
         queryAllActivity();
 
@@ -412,7 +412,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         int mId = activityArrayList.get(position).getmTaskId();
         Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(TaskDetails.this, Activity_details.class);
-        myIntent.putExtra("mId", mId); //Optional parameters
+        myIntent.putExtra(getResources().getString(R.string.mId), mId); //Optional parameters
         TaskDetails.this.startActivity(myIntent);
     }
 
@@ -427,10 +427,10 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[1] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[0] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return true;
