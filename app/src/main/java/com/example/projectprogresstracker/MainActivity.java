@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onClick(View v) {
                         // Delete Operation
                         deleteProject(mId);
-                        Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.deleted_project) + ":" + mId, Toast.LENGTH_SHORT).show();
                         dialogDeleteProject.dismiss();
                     }
                 });
