@@ -31,5 +31,6 @@
     </string-array>
     <string name="mId">mId</string>
     <string name="clicked">Clicked</string>
+    <string name="task">Task</string>
 
 </resources>

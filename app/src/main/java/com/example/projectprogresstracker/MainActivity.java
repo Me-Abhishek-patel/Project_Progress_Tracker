@@ -159,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menuDashboard:
-                        Toast.makeText(getApplicationContext(), "Dashboard clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.dashboard) + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menuTasks:
-                        Toast.makeText(getApplicationContext(), "Task clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.task) + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menuSettings:
                         Intent openSettingIntent = new Intent(MainActivity.this, SettingsActivity.class);
