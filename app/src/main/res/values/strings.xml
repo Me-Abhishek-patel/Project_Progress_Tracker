@@ -39,5 +39,9 @@
     <string name="no_pending_project_found">No pending project found</string>
     <string name="no_completed_project_found">No completed project found</string>
     <string name="days_left">Days left</string>
+    <string name="no_pending_task_found">No pending task found</string>
+    <string name="no_completed_task_found">No completed task found</string>
+    <string name="list_item">list item</string>
+
 
 </resources>

@@ -166,7 +166,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
          * retriving intents extras
          */
         Bundle extras = getIntent().getExtras();
-        mId = extras.getInt("mId");
+        mId = extras.getInt(getResources().getString(R.string.mId));
         queryProject();
         queryAllTasks();
 
@@ -335,7 +335,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                         // Delete Operation
                         queryAllTasks();
                         dbModifier.deleteTask(mId);
-                        Toast.makeText(getApplicationContext(), "Deleted project: " + mId, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.deleted_project) +": " + mId, Toast.LENGTH_SHORT).show();
                         queryAllTasks();
                         dialogDeleteTask.dismiss();
 
@@ -404,7 +404,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void collapse() {
-        if (expandablelayout2.isExpanded() && sharedPreferences.getBoolean("collapse", true)) {
+        if (expandablelayout2.isExpanded() && sharedPreferences.getBoolean(getResources().getString(R.string.collapse), true)) {
             expandablelayout2.collapse();
             expandCollapseArrow2.animate().rotation(180).start();
         }
@@ -425,9 +425,9 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         cv.put(COLUMN_TASK_PROJECT_ID, mId);
         Log.i("mStartDate: ", mStartDate);
         if (writableProjectDb.insert(TASK_TABLE_NAME, null, cv) == -1) {
-            Toast.makeText(getApplicationContext(), "Project can not be added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.project_cannot_be_added), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), projectName + " Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), projectName + " " + getResources().getString(R.string.added), Toast.LENGTH_SHORT).show();
         }
         queryAllTasks();
 
@@ -483,7 +483,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     }
                 }
                 if (taskArrayList.size() == 0)
-                    Toast.makeText(getApplicationContext(), "No pending task found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_pending_task_found), Toast.LENGTH_SHORT).show();
 
             }
         } else if (getFilter == FILTER_COMPLETED_PROJECTS) {
@@ -496,7 +496,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                 }
             }
             if (taskArrayList.size() == 0)
-                Toast.makeText(getApplicationContext(), "No completed task found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_completed_task_found), Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
                 String taskProgres = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TASK_PROGRESS));
@@ -574,11 +574,11 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("list item", "list item clicked");
+        Log.i(getResources().getString(R.string.list_item), getResources().getString(R.string.list_item) + " " + getResources().getString(R.string.clicked));
         int mId = taskArrayList.get(position).getmTaskId();
         Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(ProjectDetails.this, TaskDetails.class);
-        myIntent.putExtra("mId", mId); //Optional parameters
+        myIntent.putExtra(getResources().getString(R.string.mId), mId); //Optional parameters
         ProjectDetails.this.startActivity(myIntent);
     }
 
@@ -610,10 +610,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.option_delete:
-                                Toast.makeText(getApplicationContext(), "delete Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[1] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.option_rename:
-                                Toast.makeText(getApplicationContext(), "rename Clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getResources().getStringArray(R.array.country)[0] + " " + getResources().getString(R.string.clicked), Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return true;
