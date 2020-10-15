@@ -80,7 +80,8 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
             daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorGreen));
         }
         else {
-            daysLeft.setText("Days left: " + getDaysLeft(currentProjectModel.getmProjectEndDate()));
+
+            daysLeft.setText(getContext().getResources().getString(R.string.days_left) + ": " + getDaysLeft(currentProjectModel.getmProjectEndDate()));
             daysLeft.setGravity(Gravity.START);
 
             daysLeft.setTextColor(ContextCompat.getColor(mContext,R.color.colorSecondary));
@@ -104,7 +105,8 @@ public class ProjectAdapter extends ArrayAdapter<ProjectModel> {
         } else if(currentProjectModel.getmProjectProgress()>50) {
             pvHighlightView.setColor(ContextCompat.getColor(mContext, R.color.colorSkyBlue));
         } else {
-            pvHighlightView.setColor(ContextCompat.getColor(mContext, R.color.colorSecondary));      }
+            pvHighlightView.setColor(ContextCompat.getColor(mContext, R.color.colorSecondary));
+        }
 
 
         /**
