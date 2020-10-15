@@ -33,5 +33,6 @@
     <string name="clicked">Clicked</string>
     <string name="task">Task</string>
     <string name="deleted_project">Deleted project</string>
+    <string name="collapse">collapse</string>
 
 </resources>

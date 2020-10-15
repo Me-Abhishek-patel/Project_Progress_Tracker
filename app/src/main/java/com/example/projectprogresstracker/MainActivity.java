@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void collapse() {
-        if (expandablelayout.isExpanded() && sharedPreferences.getBoolean("collapse", true)) {
+        if (expandablelayout.isExpanded() && sharedPreferences.getBoolean(getResources().getString(R.string.collapse), true)) {
             expandablelayout.collapse();
             expandCollapseArrow.animate().rotation(180).start();
         }
