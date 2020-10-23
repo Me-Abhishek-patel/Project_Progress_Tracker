@@ -101,6 +101,8 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         mTaskAdapter = new TaskAdapter(this, activityArrayList);
         taskListView.setAdapter(mTaskAdapter);
         btnSort = findViewById(R.id.btnSortActivity);
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
 /**
