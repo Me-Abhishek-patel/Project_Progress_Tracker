@@ -51,6 +51,9 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     /**
+     * ready for release 1.0 24/10/2020
+     */
+    /**
      * instance variables declaration
      */
     BottomAppBar bottomAppBar;
