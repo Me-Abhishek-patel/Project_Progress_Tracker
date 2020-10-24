@@ -6,4 +6,7 @@
     <item
         android:id="@+id/option_delete"
         android:title="Delete" />
+    <item
+        android:id="@+id/option_refresh"
+        android:title="Refresh" />
 </menu>

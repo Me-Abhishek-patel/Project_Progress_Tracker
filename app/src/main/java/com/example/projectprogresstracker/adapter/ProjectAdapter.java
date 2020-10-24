@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.adapter;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.projectprogresstracker.R;
+import com.example.projectprogresstracker.model.ProjectModel;
 import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 

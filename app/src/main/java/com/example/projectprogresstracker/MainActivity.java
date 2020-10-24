@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
+import com.example.projectprogresstracker.adapter.ProjectAdapter;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.example.projectprogresstracker.model.ProjectModel;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onPostResume() {
         sorted = false;
-        queryAllProject();
         super.onPostResume();
+        queryAllProject();
     }
 
     @Override
@@ -165,10 +165,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menuDashboard:
-                        Toast.makeText(getApplicationContext(), "Dashboard clicked", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menuTasks:
-                        Toast.makeText(getApplicationContext(), "Task clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Single Task (In Development)", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menuSettings:
                         Intent openSettingIntent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -441,7 +440,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int mId = projectArrayList.get(position).getmId();
-        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, ProjectDetails.class);
         myIntent.putExtra("mId", mId); //Optional parameters
         MainActivity.this.startActivity(myIntent);

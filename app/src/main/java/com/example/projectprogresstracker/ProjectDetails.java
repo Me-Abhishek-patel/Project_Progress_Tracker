@@ -25,13 +25,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import com.example.projectprogresstracker.adapter.TaskAdapter;
 import com.example.projectprogresstracker.data.DbModifier;
 import com.example.projectprogresstracker.data.ProjectContract;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.example.projectprogresstracker.model.TaskModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.expandablelayout.ExpandableLayout;
+import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
 import java.text.ParseException;
@@ -200,7 +204,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             public void onClick(View v) {
 
                 String[] startEndDates = queryProject();
-                int segregatedDate[] = splitDate(startEndDates,"startDate");
+                int[] segregatedDate = splitDate(startEndDates, "startDate");
                 mStartYear = segregatedDate[0];
                 mStartMonth = segregatedDate[1];
                 mStartDay = segregatedDate[2];
@@ -258,7 +262,7 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
             public void onClick(View v) {
 
                 String[] startEndDates = queryProject();
-                int segregatedDate[] = splitDate(startEndDates,"endDate");
+                int[] segregatedDate = splitDate(startEndDates, "endDate");
                 mEndYear = segregatedDate[0];
                 mEndMonth = segregatedDate[1];
                 mEndDay = segregatedDate[2];
@@ -463,8 +467,16 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
         edtStartDate.setText(mProjectStartDate);
         edtEndDate.setText(mProjectEndDate);
         projectProgress.setProgress((float) mProjectProgress);
+        HighlightView pvHighlightView = projectProgress.getHighlightView();
+        if (mProjectProgress > 75) {
+            pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorGreen));
+        } else if (mProjectProgress > 50) {
+            pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorSkyBlue));
+        } else {
+            pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorSecondary));
+        }
         tvProjectProgress.setText(mProjectProgress + "%");
-        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeftFromAndTo(mProjectStartDate,mProjectEndDate));
+        tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeftFromAndTo(mProjectStartDate, mProjectEndDate));
         tvProjectTarget.setText("Target : " + calcHelper.getTarget(mProjectStartDate, mProjectEndDate) + "% /day");
 
         cursor.close();
@@ -665,7 +677,6 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i("list item", "list item clicked");
         int mId = taskArrayList.get(position).getmTaskId();
-        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(ProjectDetails.this, TaskDetails.class);
         myIntent.putExtra("mId", mId); //Optional parameters
         ProjectDetails.this.startActivity(myIntent);
@@ -726,6 +737,10 @@ public class ProjectDetails extends AppCompatActivity implements AdapterView.OnI
                                 return true;
                             case R.id.option_rename:
                                 AlertDialogService.getInstance().showAlertDialogToRename(ProjectDetails.this, "Project", tvProjectName, ProjectDetails.this);
+                                return true;
+                            case R.id.option_refresh:
+                                queryAllTasks();
+                                queryProject();
                                 return true;
                             default:
                                 return true;

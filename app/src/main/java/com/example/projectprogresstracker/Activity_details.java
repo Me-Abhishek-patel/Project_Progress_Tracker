@@ -1,22 +1,15 @@
 package com.example.projectprogresstracker;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -28,18 +21,14 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
-public class Activity_details extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AlertDialogCallbacks {
+public class Activity_details extends AppCompatActivity implements AlertDialogCallbacks {
     int mId;
     SQLiteDatabase writableTaskDb, readableTaskDb;
     ProjectDbHelper projectDbHelper;
     SeekBar seekBar;
     TextView tvActivityName, tvActivityProgress;
-    Spinner options;
 
-    String[] country = {"Rename", "Delete"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +40,7 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
         tvActivityName = findViewById(R.id.tv_activity_name_detail);
         tvActivityProgress = findViewById(R.id.tv_activity_progress_detail);
         seekBar = findViewById(R.id.sb_activity_details);
-        options = findViewById(R.id.activity_options);
-        options.setOnItemSelectedListener(this);
 
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, country);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        options.setAdapter(aa);
         /**
          * retriving intents extras
          */
@@ -87,8 +70,6 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
                 null               // The sort order
         );
 
-        if (cursor.getCount() > 0)
-            Toast.makeText(getApplicationContext(), "cursor length " + cursor.getCount(), Toast.LENGTH_SHORT).show();
 
         if (cursor != null && cursor.moveToFirst()) {
 
@@ -175,16 +156,6 @@ public class Activity_details extends AppCompatActivity implements AdapterView.O
      */
     public void back(View view) {
         finish();
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), country[position], Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     public void deleteActivity() {

@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.model;
 
 public class TaskModel implements Comparable<TaskModel> {
 

@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.model;
 
 public class ProjectModel implements Comparable<ProjectModel>{
     private String mProjectName;

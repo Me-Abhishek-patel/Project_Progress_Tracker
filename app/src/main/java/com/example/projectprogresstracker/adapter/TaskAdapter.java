@@ -1,4 +1,4 @@
-package com.example.projectprogresstracker;
+package com.example.projectprogresstracker.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,11 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.projectprogresstracker.R;
+import com.example.projectprogresstracker.data.DbModifier;
+import com.example.projectprogresstracker.model.TaskModel;
 import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
@@ -22,11 +26,13 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
 
     Context mContext;
     private List<TaskModel> mTaskList = new ArrayList<>();
+    DbModifier dbModifier;
 
     public TaskAdapter(@NonNull Context context, @NonNull ArrayList<TaskModel> resource) {
         super(context, 0, resource);
         mContext = context;
         mTaskList = resource;
+        dbModifier = new DbModifier(mContext);
     }
 
     @Override
@@ -37,18 +43,34 @@ public class TaskAdapter extends ArrayAdapter<TaskModel> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.task_item, parent, false);
 
-        TaskModel currentTaskModel = mTaskList.get(position);
+        final TaskModel currentTaskModel = mTaskList.get(position);
 
-        Switch switcherX = listItem.findViewById(R.id.task_witcher);
+        final Switch switcherX = listItem.findViewById(R.id.task_witcher);
         if (currentTaskModel.getmTaskProgress() == 100)
             switcherX.setChecked(true);
         else
             switcherX.setChecked(false);
+
+
+        switcherX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (switcherX.isChecked()) {
+                    currentTaskModel.setmTaskProgress(100);
+                    dbModifier.setTaskProgress(currentTaskModel.getmTaskId(), 100);
+                    Toast.makeText(mContext, "progress set to 100: please refresh", Toast.LENGTH_SHORT).show();
+                } else {
+                    dbModifier.setTaskProgress(currentTaskModel.getmTaskId(), 0);
+                    currentTaskModel.setmTaskProgress(0);
+                    Toast.makeText(mContext, "progress set to 0: please refresh", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         TextView taskName = listItem.findViewById(R.id.tv_task_name);
         taskName.setText(currentTaskModel.getmTaskName());

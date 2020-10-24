@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,10 +24,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
 
-import com.example.projectprogresstracker.data.ProjectContract;
+import com.example.projectprogresstracker.adapter.ActivityAdapter;
 import com.example.projectprogresstracker.data.ProjectDbHelper;
+import com.example.projectprogresstracker.model.TaskModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.skydoves.progressview.HighlightView;
 import com.skydoves.progressview.ProgressView;
 
 import java.text.ParseException;
@@ -43,12 +45,10 @@ import static com.example.projectprogresstracker.data.ProjectContract.ProjectEnt
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_PROGRESS;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_ACTIVITY_TASK_ID;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_PROJECT_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_DESCRIPTION;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_END_DATE;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.COLUMN_TASK_PROGRESS;
-import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TABLE_NAME;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_ID;
 import static com.example.projectprogresstracker.data.ProjectContract.ProjectEntry.TASK_TABLE_NAME;
 
@@ -60,7 +60,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     SeekBar seekBar;
     ListView taskListView;
     ArrayList<TaskModel> activityArrayList;
-    TaskAdapter mTaskAdapter;
+    ActivityAdapter mTaskAdapter;
     TextView tvTaskProgress, tvTaskName, tvTaskEndDate, tvTaskDesc, tvDaysLeft;
     SimpleDateFormat sdf, inputFormat;
     CalcHelper calcHelper;
@@ -98,7 +98,7 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
         taskListView = findViewById(R.id.activity_listView);
         activityArrayList = new ArrayList<>();
         taskListView.setOnItemClickListener(this);
-        mTaskAdapter = new TaskAdapter(this, activityArrayList);
+        mTaskAdapter = new ActivityAdapter(this, activityArrayList);
         taskListView.setAdapter(mTaskAdapter);
         btnSort = findViewById(R.id.btnSortActivity);
         sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -288,6 +288,14 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
             tvDaysLeft.setText("Days Left : " + calcHelper.getDaysLeft(mTaskEndDate));
             seekBar.setProgress(Integer.parseInt(mTaskProgress));
             taskProgressView.setProgress(Integer.parseInt(mTaskProgress));
+            HighlightView pvHighlightView = taskProgressView.getHighlightView();
+            if (Integer.parseInt(mTaskProgress) > 75) {
+                pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorGreen));
+            } else if (Integer.parseInt(mTaskProgress) > 50) {
+                pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorSkyBlue));
+            } else {
+                pvHighlightView.setColor(ContextCompat.getColor(this, R.color.colorSecondary));
+            }
 
             cursor.close();
         }
@@ -454,7 +462,6 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int mId = activityArrayList.get(position).getmTaskId();
-        Toast.makeText(getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(TaskDetails.this, Activity_details.class);
         myIntent.putExtra("mId", mId); //Optional parameters
         TaskDetails.this.startActivity(myIntent);
@@ -482,6 +489,10 @@ public class TaskDetails extends AppCompatActivity implements AdapterView.OnItem
                                 return true;
                             case R.id.option_rename:
                                 AlertDialogService.getInstance().showAlertDialogToRename(TaskDetails.this, "Task", tvTaskName, TaskDetails.this);
+                                return true;
+                            case R.id.option_refresh:
+                                queryAllActivity();
+                                queryTask();
                                 return true;
                             default:
                                 return true;
